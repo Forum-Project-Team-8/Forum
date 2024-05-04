@@ -1,33 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
+import Header from './components/Header';
+import { useEffect, useState } from 'react';
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AppContext } from './context/AppContext.jsx';
+import { getUserData } from './services/user.service.js';
+import {useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './config/firebase-config.js';
+import RegisterAdmin from './components/RegisterAdmin.jsx';
 
-function App() {
-  const [count, setCount] = useState(0)
+  
+  function App() {
+    const [appState, setAppState] = useState({
+      user: null,
+      userData: null,
+    });
+    const [user, loading, error] = useAuthState(auth);
+  
+    if (user && appState.user !== user) {
+      setAppState({ ...appState, user });
+    }
+
+    useEffect(() => {
+      if (!appState.user) return;
+    
+      getUserData(appState.user.uid)
+        .then(snapshot => {
+          if (snapshot && snapshot.val()) { // Add null/undefined check here
+            const userData = Object.values(snapshot.val())[0];
+            setAppState({...appState, userData});
+          } else {
+            // Handle case where snapshot is null or undefined
+            console.error("Snapshot is null or undefined.");
+          }
+        })
+        .catch(error => {
+          // Handle error
+          console.error("Error fetching user data:", error);
+        });
+    }, [appState.user]);
+  
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <AppContext.Provider value={{...appState, setAppState}}>
+          <Header />
+            <Routes>
+              <Route path="/login" element={<Login />}/>
+              <Route path="/register" element={<Register />}/>
+              <Route path="/registerAdmin" element={<RegisterAdmin />}/>
+              <Route path="/" element={<Home />}/>
+              <Route path="*" element={<header>Not Found</header>}/>
+
+            </Routes>
+            </AppContext.Provider>
+      </BrowserRouter>
+
     </>
   )
 }
