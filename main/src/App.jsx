@@ -10,6 +10,7 @@ import { getUserData } from './services/user.service.js';
 import {useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config.js';
 import RegisterAdmin from './components/RegisterAdmin.jsx';
+import CreatePost from './components/CreatePost.jsx';
 
   
   function App() {
@@ -53,6 +54,7 @@ import RegisterAdmin from './components/RegisterAdmin.jsx';
               <Route path="/register" element={<Register />}/>
               <Route path="/registerAdmin" element={<RegisterAdmin />}/>
               <Route path="/" element={<Home />}/>
+              <Route path="/posts-create" element={<CreatePost/>}/>
               <Route path="*" element={<header>Not Found</header>}/>
 
             </Routes>

@@ -19,7 +19,10 @@ export default function Header() {
             {showContentAdmin && ( // Render content based on showContent state
                 <>
                     {user ? (
+                        <>
+                        <NavLink to="/posts-create">Create tweet</NavLink>
                         <button onClick={logout}>LogOut</button>
+                        </>
                     ) : (
                         <><br />
                             <NavLink to="/login">Login</NavLink> <br />
@@ -33,7 +36,10 @@ export default function Header() {
             {showContent && ( // Render content based on showContent state
                 <>
                     {user ? (
+                        <>
+                        <NavLink to="/posts-create">Create post</NavLink>
                         <button onClick={logout}>LogOut</button>
+                        </>
                     ) : (
                         <><br />
                             <NavLink to="/login">Login</NavLink> <br />
