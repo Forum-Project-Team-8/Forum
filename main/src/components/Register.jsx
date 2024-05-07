@@ -25,9 +25,31 @@ export default function Register() {
       [prop]: e.target.value,
     });
   };
+  const validateForm = () => {
+    if (
+      form.firstname.length < 4 ||
+      form.firstname.length > 32 ||
+      form.lastname.length < 4 ||
+      form.lastname.length > 32
+    ) {
+      alert("First and last names must be between 4 and 32 characters.");
+      return false;
+    }
 
-  const register = async() => {
-    // TODO: validate form data
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+    ) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const register = async () => {
+    if (!validateForm()) {
+      return;
+    }
     try {
       const user = await getUserByHandle(form.username);
       user.isAdmin = form.isAdmin;

@@ -12,6 +12,7 @@ export default function Post({ post }) {
     const { userData } = useContext(AppContext);
     const like = () => likePost(post.id, userData.handle);
     const dislike = () => dislikePost(post.id, userData.handle);
+    
 
     return (
         <div className="post">

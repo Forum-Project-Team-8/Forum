@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { logoutUser } from "../services/auth.service";
@@ -7,10 +7,11 @@ export default function Header() {
     const { user, userData, setAppState } = useContext(AppContext);
     const [showContent, setShowContent] = useState(false); 
     const [showContentAdmin, setShowContentAdmin] = useState(false); 
-
+    const navigate = useNavigate();
     const logout = async () => {
         await logoutUser();
         setAppState({ user: null, userData: null });
+        navigate('/');
     };
 
     return (
@@ -38,7 +39,6 @@ export default function Header() {
                         {/* {console.log(userData.isAdmin)} */}
                         <NavLink to="/posts-create">Create post</NavLink>
                         <NavLink to="/posts">All posts</NavLink>
-                        <NavLink to="/posts/:id">Single post</NavLink>
                         <button onClick={logout}>LogOut</button>
                         </>
                     ) : (
