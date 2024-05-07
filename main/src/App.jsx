@@ -11,6 +11,8 @@ import {useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config.js';
 import RegisterAdmin from './components/RegisterAdmin.jsx';
 import CreatePost from './components/CreatePost.jsx';
+import AllPosts from './components/AllPosts.jsx';
+import SinglePost from './components/SinglePost.jsx';
 
   
   function App() {
@@ -55,6 +57,8 @@ import CreatePost from './components/CreatePost.jsx';
               <Route path="/registerAdmin" element={<RegisterAdmin />}/>
               <Route path="/" element={<Home />}/>
               <Route path="/posts-create" element={<CreatePost/>}/>
+              <Route path="/posts" element={<AllPosts/>}/>  
+              <Route path="/posts/:id" element={<SinglePost/>}/>       
               <Route path="*" element={<header>Not Found</header>}/>
 
             </Routes>

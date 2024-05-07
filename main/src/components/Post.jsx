@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { likePost, dislikePost } from '../../services/posts.service';
+import { likePost, dislikePost } from '../services/posts.service';
 import { useContext } from 'react';
-import { AppContext } from '../../context/AppContext';
+import { AppContext } from '../context/AppContext';
 
 /**
  * 
