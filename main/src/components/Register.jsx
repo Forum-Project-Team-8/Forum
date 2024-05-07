@@ -11,7 +11,6 @@ export default function Register() {
     username: '',
     email: '',
     password: '',
-    isAdmin: false,
   });
   const { user, setAppState } = useContext(AppContext);
   const navigate = useNavigate();
@@ -31,12 +30,14 @@ export default function Register() {
     // TODO: validate form data
     try {
       const user = await getUserByHandle(form.username);
+      user.isAdmin = form.isAdmin;
       if (user.exists()) {
         return console.log('User with this username already exists!');
       }
       const credential = await registerUser(form.email, form.password);
-      await createUserHandle( form.firstname, form.lastname, form.username, credential.user.uid, credential.user.email, form.isAdmin);
+      await createUserHandle( form.firstname, form.lastname, form.username, credential.user.uid, credential.user.email);
       setAppState({ user: credential.user, userData: null });
+   
       navigate('/');
       alert('Registered!');
     } catch (error) {

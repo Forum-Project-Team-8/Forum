@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { addPost } from "../services/posts.service"
 import { AppContext } from "../context/AppContext";
+import { updateUserPosts } from "../services/user.service";
 
 export default function CreatePost() {
     const [post, setPost] = useState({
@@ -20,8 +21,9 @@ export default function CreatePost() {
             return alert('Content must be at least 5 characters long');
         }
 
-        await addPost(userData.handle, post.content);
+        const postId = await addPost(userData.handle, post.content);
 
+        await updateUserPosts(userData.handle, postId);
         setPost({
             content: '',
         });

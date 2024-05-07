@@ -9,7 +9,7 @@ import { AppContext } from './context/AppContext.jsx';
 import { getUserData } from './services/user.service.js';
 import {useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config.js';
-import RegisterAdmin from './components/RegisterAdmin.jsx';
+//import RegisterAdmin from './components/RegisterAdmin.jsx';
 import CreatePost from './components/CreatePost.jsx';
 import AllPosts from './components/AllPosts.jsx';
 import SinglePost from './components/SinglePost.jsx';
@@ -28,22 +28,29 @@ import SinglePost from './components/SinglePost.jsx';
 
     useEffect(() => {
       if (!appState.user) return;
-    
+      console.log("User UID:", appState.user.uid);
+
       getUserData(appState.user.uid)
         .then(snapshot => {
-          if (snapshot && snapshot.val()) { // Add null/undefined check here
-            const userData = Object.values(snapshot.val())[0];
-            setAppState({...appState, userData});
+          if (snapshot && snapshot.val()) { 
+            setAppState({...appState, userData:Object.values(snapshot.val())[0]});
           } else {
             // Handle case where snapshot is null or undefined
             console.error("Snapshot is null or undefined.");
           }
+
+         
+              
         })
         .catch(error => {
           // Handle error
           console.error("Error fetching user data:", error);
         });
     }, [appState.user]);
+
+    useEffect(() => {
+      console.log("Updated userData:", appState.userData);
+    }, [appState.userData]);
   
 
   return (
@@ -54,13 +61,13 @@ import SinglePost from './components/SinglePost.jsx';
             <Routes>
               <Route path="/login" element={<Login />}/>
               <Route path="/register" element={<Register />}/>
-              <Route path="/registerAdmin" element={<RegisterAdmin />}/>
+              {/* <Route path="/registerAdmin" element={<RegisterAdmin />}/> */}
               <Route path="/" element={<Home />}/>
               <Route path="/posts-create" element={<CreatePost/>}/>
               <Route path="/posts" element={<AllPosts/>}/>  
               <Route path="/posts/:id" element={<SinglePost/>}/>       
               <Route path="*" element={<header>Not Found</header>}/>
-
+     
             </Routes>
             </AppContext.Provider>
       </BrowserRouter>
