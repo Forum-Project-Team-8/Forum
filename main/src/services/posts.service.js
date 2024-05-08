@@ -58,3 +58,15 @@ export const dislikePost = async(postId, handle) => {
 
     update(ref(db), updateVal);
 };
+
+export const addReply = async(postId, author, content) => {
+    const reply = {
+        author,
+        content,
+        createdOn: Date.now(),
+    };
+
+    const result = await push(ref(db, `posts/${postId}/replies`), reply);
+    console.log(result.key);
+    return result.key;
+};

@@ -22,7 +22,7 @@ export default function SinglePost() {
 
     return (
         <div>
-            <h1>Single Post</h1>
+            <h1>Single Posts</h1>
             {post && <Post post={post} />}
         </div>
     )

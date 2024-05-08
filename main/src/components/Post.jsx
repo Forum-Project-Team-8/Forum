@@ -1,20 +1,51 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { likePost, dislikePost } from '../services/posts.service';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
+import { likePost, dislikePost, getPostById, addReply } from '../services/posts.service';
+// export default function Post({ post }) {
+//     const { userData } = useContext(AppContext);
+//     const [replyContent, setReplyContent] = useState('');
+//     const like = () => likePost(post.id, userData.handle);
+//     const dislike = () => dislikePost(post.id, userData.handle);
+//     const submitReply = async (e) => {
+//         e.preventDefault();
+//         try {
+//             const replyId = await addReply(post.id, replyContent, userData.handle);
+//             console.log(`Added reply with ID: ${replyId}`);
+//             setReplyContent('');
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     };
 
-export default function Post({ post }) {
+export default function Post({ post: initialPost }) {
     const { userData } = useContext(AppContext);
     const [replyContent, setReplyContent] = useState('');
+    const [post, setPost] = useState(initialPost);
+
+    useEffect(() => {
+        fetchPost();
+    }, []);
+
+    const fetchPost = async () => {
+        const fetchedPost = await getPostById(initialPost.id);
+        setPost(fetchedPost);
+    };
+
     const like = () => likePost(post.id, userData.handle);
     const dislike = () => dislikePost(post.id, userData.handle);
-    const submitReply = (e) => {
+
+    const submitReply = async (e) => {
         e.preventDefault();
-        // Add code to submit the reply to the server
-        // You can use a service function or make an API request here
-        // Example: postReply(post.id, replyContent, userData.handle);
-        setReplyContent('');
+        try {
+            const replyId = await addReply(post.id, replyContent, userData.handle);
+            console.log(`Added reply with ID: ${replyId}`);
+            setReplyContent('');
+            fetchPost(); // Fetch the post again after a reply is added
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -26,7 +57,14 @@ export default function Post({ post }) {
                 ? <button onClick={dislike}>Dislike</button>
                 : <button onClick={like}>Like</button>
             }
-
+    
+    {post.replies && Object.values(post.replies).map((reply, index) => (
+    <div key={index}>
+        <p>{reply.content}</p>
+        <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
+    </div>
+))}
+    
             <form onSubmit={submitReply}>
                 <textarea
                     value={replyContent}
