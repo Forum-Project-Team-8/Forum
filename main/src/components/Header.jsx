@@ -1,8 +1,12 @@
+
+
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { logoutUser } from "../services/auth.service";
 import UsersList from "./UsersList";
+import { Button } from "@chakra-ui/react";
+
 export default function Header() {
     const { user, userData, setAppState } = useContext(AppContext);
     const [showContent, setShowContent] = useState(false); 
@@ -17,9 +21,9 @@ export default function Header() {
     return (
         <header>
             {userData && userData.isAdmin && (
-                <button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</button>
+                <Button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</Button>
             )}
-            {/* {(user && userData.isAdmin) && <button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</button>} */}
+            {/* {(user && userData.isAdmin) && <Button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</Button>} */}
             {showContentAdmin && ( 
                 <>
                                             
@@ -30,7 +34,7 @@ export default function Header() {
                 </>
             )}
 
-            <button onClick={() => setShowContent(!showContent)}>User</button> 
+            <Button onClick={() => setShowContent(!showContent)}>User</Button> 
             {showContent && ( // Render content based on showContent state
                 <>
                     {user ? (
@@ -39,7 +43,7 @@ export default function Header() {
                         {/* {console.log(userData.isAdmin)} */}
                         <NavLink to="/posts-create">Create post</NavLink>
                         <NavLink to="/posts">All posts</NavLink>
-                        <button onClick={logout}>LogOut</button>
+                        <Button onClick={logout}>LogOut</Button>
                         </>
                     ) : (
                         <><br />

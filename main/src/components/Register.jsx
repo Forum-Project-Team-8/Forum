@@ -1,25 +1,54 @@
-import { useContext, useState } from "react"
+
+import { useContext, useState } from "react";
 import { registerUser } from "../services/auth.service";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { createUserHandle, getUserByHandle } from "../services/user.service";
+import { Box, Button, FormControl, FormLabel, Input, Heading } from "@chakra-ui/react";
 
 export default function Register() {
+
+  const boxStyles = {
+    bg: 'tomato',
+    color: 'white',
+    fontWeight: 'bold',
+    p: 4,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #333)',
+    ':hover': {
+      bg: 'yellow.200',
+      color: 'black',
+    },
+  };
+
+  const buttonStyles = { 
+    color: 'black',
+    bg: 'yellow.200',
+    fontWeight: 'bold',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #333)',
+    ':hover': {
+      bg: 'tomato',
+      color: 'white',
+    },
+  };
+
   const [form, setForm] = useState({
-    firstname: '',
-    lastname: '',
-    username: '',
-    email: '',
-    password: '',
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    password: "",
   });
   const { user, setAppState } = useContext(AppContext);
   const navigate = useNavigate();
 
   if (user) {
-    navigate('/');
+    navigate("/");
   }
 
-  const updateForm = prop => e => {
+  const updateForm = (prop) => (e) => {
     setForm({
       ...form,
       [prop]: e.target.value,
@@ -36,9 +65,7 @@ export default function Register() {
       return false;
     }
 
-    if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
-    ) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       alert("Please enter a valid email address.");
       return false;
     }
@@ -54,28 +81,84 @@ export default function Register() {
       const user = await getUserByHandle(form.username);
       user.isAdmin = form.isAdmin;
       if (user.exists()) {
-        return console.log('User with this username already exists!');
+        return console.log("User with this username already exists!");
       }
       const credential = await registerUser(form.email, form.password);
-      await createUserHandle( form.firstname, form.lastname, form.username, credential.user.uid, credential.user.email);
+      await createUserHandle(
+        form.firstname,
+        form.lastname,
+        form.username,
+        credential.user.uid,
+        credential.user.email
+      );
       setAppState({ user: credential.user, userData: null });
-   
-      navigate('/');
-      alert('Registered!');
+
+      navigate("/");
+      alert("Registered!");
     } catch (error) {
-      if (error.message.includes('auth/email-already-in-use')) {
-        console.log('User has already been registered!');
+      if (error.message.includes("auth/email-already-in-use")) {
+        console.log("User has already been registered!");
       }
     }
   };
 
-  return (<div>
-    <h1>Register</h1>
-    <label htmlFor="firstname">First name:</label><input value={form.firstname} onChange={updateForm('firstname')} type="text" name="firstname" id="firstname" /><br/>
-    <label htmlFor="lastname">Last name:</label><input value={form.lastname} onChange={updateForm('lastname')} type="text" name="lastname" id="lastname" /><br/>
-    <label htmlFor="username">Username:</label><input value={form.username} onChange={updateForm('username')} type="text" name="username" id="username" /><br/>
-    <label htmlFor="email">Email:</label><input value={form.email} onChange={updateForm('email')} type="text" name="email" id="email" /><br/>
-    <label htmlFor="password">Password:</label><input value={form.password} onChange={updateForm('password')} type="password" name="password" id="password" /><br/><br/>
-    <button onClick={register}>Register</button>
-  </div>)
+  return (
+
+
+
+    <Box sx={boxStyles}>
+      <Heading>Register</Heading>
+      <FormControl>
+        <FormLabel htmlFor="firstname">First name:</FormLabel>
+        <Input
+          value={form.firstname}
+          onChange={updateForm("firstname")}
+          type="text"
+          name="firstname"
+          id="firstname"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="lastname">Last name:</FormLabel>
+        <Input
+          value={form.lastname}
+          onChange={updateForm("lastname")}
+          type="text"
+          name="lastname"
+          id="lastname"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="username">Username:</FormLabel>
+        <Input
+          value={form.username}
+          onChange={updateForm("username")}
+          type="text"
+          name="username"
+          id="username"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="email">Email:</FormLabel>
+        <Input
+          value={form.email}
+          onChange={updateForm("email")}
+          type="text"
+          name="email"
+          id="email"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="password">Password:</FormLabel>
+        <Input
+          value={form.password}
+          onChange={updateForm("password")}
+          type="password"
+          name="password"
+          id="password"
+        />
+      </FormControl>
+      <Button sx={buttonStyles} onClick={register}>Register</Button>
+    </Box>
+  );
 }
