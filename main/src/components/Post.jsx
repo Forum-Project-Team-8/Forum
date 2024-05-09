@@ -33,8 +33,18 @@ export default function Post({ post: initialPost }) {
         setPost(fetchedPost);
     };
 
-    const like = () => likePost(post.id, userData.handle);
-    const dislike = () => dislikePost(post.id, userData.handle);
+    // const like = () => likePost(post.id, userData.handle);
+    // const dislike = () => dislikePost(post.id, userData.handle);
+
+    const like = async () => {
+        await likePost(post.id, userData.handle);
+        fetchPost();
+    };
+    
+    const dislike = async () => {
+        await dislikePost(post.id, userData.handle);
+        fetchPost();
+    };
 
     const submitReply = async (e) => {
         e.preventDefault();
@@ -57,6 +67,7 @@ export default function Post({ post: initialPost }) {
                 ? <button onClick={dislike}>Dislike</button>
                 : <button onClick={like}>Like</button>
             }
+            <p>Likes: {post.likedBy.length}</p>
     
     {post.replies && Object.values(post.replies).map((reply, index) => (
     <div key={index}>
