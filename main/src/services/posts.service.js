@@ -70,3 +70,17 @@ export const addReply = async(postId, author, content) => {
     console.log(result.key);
     return result.key;
 };
+
+export const getPosts = async () => {
+    const snapshot = await get(ref(db, 'posts'));
+    if (!snapshot.exists()) return [];
+
+    return Object.entries(snapshot.val());
+};
+
+export const getUsers = async () => {
+    const snapshot = await get(ref(db, 'users'));
+    if (!snapshot.exists()) return [];
+
+    return Object.entries(snapshot.val());
+};
