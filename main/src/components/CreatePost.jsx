@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { addPost } from "../services/posts.service"
 import { AppContext } from "../context/AppContext";
 import { updateUserPosts } from "../services/user.service";
+import { Box, Button, FormControl, FormLabel, Input, Textarea } from "@chakra-ui/react";
 
 export default function CreatePost() {
     const [post, setPost] = useState({
@@ -36,13 +37,35 @@ export default function CreatePost() {
     };
 
     return (
-        <div>
-            <h1>Create post</h1>
-            <label htmlFor="input-title">Title:</label><br />
-            <input type="text" value={post.title} onChange={e => updatePost(e.target.value, 'title')} name="input-title" id="input-title" /><br /><br />
-            <label htmlFor="input-content">Content:</label><br />
-            <textarea value={post.content} onChange={e => updatePost(e.target.value, 'content')} name="input-content" id="input-content" cols="30" rows="10"></textarea><br /><br />
-            <button onClick={createPost}>Create</button>
-        </div>
-    )
+
+        
+
+     
+            <Box>
+                <h1>Create post</h1>
+                <FormControl>
+                    <FormLabel htmlFor="input-title">Title:</FormLabel>
+                    <Input
+                        type="text"
+                        value={post.title}
+                        onChange={(e) => updatePost(e.target.value, 'title')}
+                        name="input-title"
+                        id="input-title"
+                    />
+                </FormControl>
+                <FormControl>
+                    <FormLabel htmlFor="input-content">Content:</FormLabel>
+                    <Textarea
+                        value={post.content}
+                        onChange={(e) => updatePost(e.target.value, 'content')}
+                        name="input-content"
+                        id="input-content"
+                        cols="30"
+                        rows="10"
+                    />
+                </FormControl>
+                <Button onClick={createPost}>Create</Button>
+            </Box>
+        );
+    
 }
