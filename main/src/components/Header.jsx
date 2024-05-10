@@ -6,6 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { logoutUser } from "../services/auth.service";
 import UsersList from "./UsersList";
 import { Button } from "@chakra-ui/react";
+import AdminPanel from "./AdminPanel";
 
 export default function Header() {
     const { user, userData, setAppState } = useContext(AppContext);
@@ -24,15 +25,7 @@ export default function Header() {
                 <Button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</Button>
             )}
             {/* {(user && userData.isAdmin) && <Button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</Button>} */}
-            {showContentAdmin && ( 
-                <>
-                                            
-                        <div>Show admin stuff</div>
-                        <UsersList />
-
-                    
-                </>
-            )}
+            {showContentAdmin && <AdminPanel />}
 
             <Button onClick={() => setShowContent(!showContent)}>User</Button> 
             {showContent && ( // Render content based on showContent state

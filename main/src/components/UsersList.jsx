@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { db } from "../config/firebase-config";
-import { get, set, ref, query, equalTo, orderByChild, update, remove } from 'firebase/database';
+import { get, ref, update, remove } from 'firebase/database';
 
 function UsersList() {
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // New state variable to track loading state
+  const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    // Fetch user data from Firebase
     const fetchUsers = async () => {
       try {
         const usersSnapshot = await get(ref(db, 'users'));
@@ -19,7 +20,7 @@ function UsersList() {
         });
 
         setUsers(usersData);
-        setIsLoading(false); // Set loading state to false after users are fetched
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -28,6 +29,10 @@ function UsersList() {
     fetchUsers();
   }, []);
 
+  const handleSearch = () => {
+    const results = users.filter(user => (user.handle === search || user.email === search));
+    setSearchResults(results);
+  };
   const deleteUser = async (handle) => {
     try {
       const usersRef = ref(db, 'users');
@@ -73,27 +78,129 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
     return <div>Loading...</div>;
   }
 
+  const renderUser = (user, index) => (
+    <li key={index}>
+      <strong>User ID:</strong> {user.uid}<br />
+      <strong>Username:</strong> {user.handle}<br />
+      <strong>First Name:</strong> {user.firstname}<br />
+      <strong>Last Name:</strong> {user.lastname}<br />
+      <strong>Email:</strong> {user.email}<br />
+      <strong>isAdmin:</strong> {user.isAdmin ? 'Yes' : 'No'}<br />
+      <button onClick={() => deleteUser(user.handle)}>Delete</button>
+      <button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</button>
+    </li>
+  );
+
   return (
     <div>
       <h2>Users List</h2>
+      <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search" />
+      <button onClick={handleSearch}>Search</button>
       <ul>
-        {users.map((user, index) => (
-          <li key={index}>
-            <strong>User ID:</strong> {user.uid}<br />
-            <strong>First Name:</strong> {user.firstname}<br />
-            <strong>Last Name:</strong> {user.lastname}<br />
-            <strong>Email:</strong> {user.email}<br />
-            <strong>isAdmin:</strong> {user.isAdmin ? 'Yes' : 'No'}<br />
-            <button onClick={() => deleteUser(user.handle)}>Delete</button>
-            <button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</button>
-          </li>
-        ))}
+        {searchResults.length > 0 ? searchResults.map(renderUser) : users.map(renderUser)}
       </ul>
     </div>
   );
 }
 
 export default UsersList;
+// import { useEffect, useState } from 'react';
+// import { db } from "../config/firebase-config";
+// import { get, set, ref, query, equalTo, orderByChild, update, remove } from 'firebase/database';
+
+// function UsersList() {
+//   const [users, setUsers] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true); // New state variable to track loading state
+
+//   useEffect(() => {
+//     // Fetch user data from Firebase
+//     const fetchUsers = async () => {
+//       try {
+//         const usersSnapshot = await get(ref(db, 'users'));
+
+//         const usersData = [];
+
+//         usersSnapshot.forEach((userSnapshot) => {
+//           usersData.push(userSnapshot.val());
+//         });
+
+//         setUsers(usersData);
+//         setIsLoading(false); // Set loading state to false after users are fetched
+//       } catch (error) {
+//         console.error('Error fetching users:', error);
+//       }
+//     };
+
+//     fetchUsers();
+//   }, []);
+
+//   const deleteUser = async (handle) => {
+//     try {
+//       const usersRef = ref(db, 'users');
+//       const usersSnapshot = await get(usersRef);
+  
+//       usersSnapshot.forEach((userSnapshot) => {
+//         const userData = userSnapshot.val();
+//         if (userData.handle === handle) {
+//           const userId = userSnapshot.key;
+//           remove(ref(db, `users/${userId}`));
+//           setUsers(users.filter(user => user.handle !== handle));
+//         }
+//       });
+//     } catch (error) {
+//       console.error('Error deleting user:', error);
+//     }
+//   };
+
+
+// const toggleAdminStatus = async (handle, currentIsAdmin) => {
+//     try {
+//       const usersRef = ref(db, 'users');
+//       const usersSnapshot = await get(usersRef);
+  
+//       usersSnapshot.forEach((userSnapshot) => {
+//         const userData = userSnapshot.val();
+//         if (userData.handle === handle) {
+//           const userId = userSnapshot.key;
+//           update(ref(db, `users/${userId}`), { isAdmin: !currentIsAdmin });
+//           setUsers(users.map(user => {
+//             if (user.handle === handle) {
+//               return { ...user, isAdmin: !currentIsAdmin };
+//             }
+//             return user;
+//           }));
+//         }
+//       });
+//     } catch (error) {
+//       console.error('Error toggling admin status:', error);
+//     }
+//   };
+//   if (isLoading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return (
+//     <div>
+//       <h2>Users List</h2>
+//       <ul>
+//         {users.map((user, index) => (
+//           <li key={index}>
+//             <strong>User ID:</strong> {user.uid}<br />
+//             <strong>Username:</strong> {user.handle}<br />
+//             <strong>First Name:</strong> {user.firstname}<br />
+//             <strong>Last Name:</strong> {user.lastname}<br />
+//             <strong>Email:</strong> {user.email}<br />
+//             <strong>isAdmin:</strong> {user.isAdmin ? 'Yes' : 'No'}<br />
+//             <button onClick={() => deleteUser(user.handle)}>Delete</button>
+//             <button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</button>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
+
+// export default UsersList;
 
 
 // import { useEffect, useState } from 'react';
