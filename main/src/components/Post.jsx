@@ -48,11 +48,16 @@ export default function Post({ post: initialPost }) {
 
     const submitReply = async (e) => {
         e.preventDefault();
+        console.log(userData.isBlocked)
+        if (userData.isBlocked) {
+            console.error('Cannot add reply: User is blocked.');
+            return;
+        }
         try {
             const replyId = await addReply(post.id, replyContent, userData.handle);
             console.log(`Added reply with ID: ${replyId}`);
             setReplyContent('');
-            fetchPost(); // Fetch the post again after a reply is added
+            fetchPost(); 
         } catch (error) {
             console.error(error);
         }

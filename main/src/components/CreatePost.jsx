@@ -19,6 +19,11 @@ export default function CreatePost() {
     }
 
     const createPost = async () => {
+
+        if (userData.isBlocked) {
+            console.error('Cannot create post: User is blocked.');
+            return;
+        }
         if (post.title.length < 1 || post.title.length > 64) {
             return alert('Title must be between 16 and 64 characters long');
         }

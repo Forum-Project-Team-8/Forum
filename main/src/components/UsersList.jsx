@@ -61,6 +61,7 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
         const userData = userSnapshot.val();
         if (userData.handle === handle) {
           const userId = userSnapshot.key;
+          console.log(userSnapshot)
           update(ref(db, `users/${userId}`), { isAdmin: !currentIsAdmin });
           setUsers(users.map(user => {
             if (user.handle === handle) {
@@ -74,6 +75,30 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
       console.error('Error toggling admin status:', error);
     }
   };
+
+  const toggleUserBlock = async (handle, currentIsBlocked) => {
+    try {
+      const usersRef = ref(db, 'users');
+      const usersSnapshot = await get(usersRef);
+  
+      usersSnapshot.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.handle === handle) {
+          const userId = userSnapshot.key;
+          update(ref(db, `users/${userId}`), { isBlocked: !currentIsBlocked });
+          setUsers(users.map(user => {
+            if (user.handle === handle) {
+              return { ...user, isBlocked: !currentIsBlocked };
+            }
+            return user;
+          }));
+        }
+      });
+    } catch (error) {
+      console.error('Error toggling user lock:', error);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -88,6 +113,7 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
       <strong>isAdmin:</strong> {user.isAdmin ? 'Yes' : 'No'}<br />
       <button onClick={() => deleteUser(user.handle)}>Delete</button>
       <button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</button>
+      <button onClick={() => toggleUserBlock(user.handle, user.isBlocked)}>{user.isBlocked ? 'Unblock' : 'Block'}</button>
     </li>
   );
 
