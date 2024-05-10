@@ -28,6 +28,15 @@ export async function updateUserPosts(handle, postId) {
   }
 }
 
+export async function updateUser(handle, updatedData) {
+  try {
+      await update(ref(db, `users/${handle}`), updatedData);
+  } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+  }
+}
+
 
 
 

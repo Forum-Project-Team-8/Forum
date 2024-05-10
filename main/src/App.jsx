@@ -12,6 +12,7 @@ import { auth } from './config/firebase-config.js';
 import CreatePost from './components/CreatePost.jsx';
 import AllPosts from './components/AllPosts.jsx';
 import SinglePost from './components/SinglePost.jsx';
+import EditProfile from './components/EditProfile.jsx';
 
   
   function App() {
@@ -63,7 +64,8 @@ import SinglePost from './components/SinglePost.jsx';
               <Route path="/" element={<Home />}/>
               <Route path="/posts-create" element={<CreatePost/>}/>
               <Route path="/posts" element={<AllPosts/>}/>  
-              <Route path="/posts/:id" element={<SinglePost/>}/>       
+              <Route path="/posts/:id" element={<SinglePost/>}/>
+              <Route path="/edit-profile" element={<EditProfile/>}/>       
               <Route path="*" element={<header>Not Found</header>}/>
      
             </Routes>

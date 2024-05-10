@@ -43,6 +43,7 @@ export default function Header() {
                         {/* {console.log(userData.isAdmin)} */}
                         <NavLink to="/posts-create">Create post</NavLink>
                         <NavLink to="/posts">All posts</NavLink>
+                        <NavLink to="/edit-profile">Edit Profile</NavLink>
                         <Button onClick={logout}>LogOut</Button>
                         </>
                     ) : (
