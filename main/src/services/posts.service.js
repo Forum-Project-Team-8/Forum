@@ -84,3 +84,20 @@ export const getUsers = async () => {
 
     return Object.entries(snapshot.val());
 };
+
+/* export const getPostByUser = async (handle) => {
+    const snapshot = await get(ref(db, 'posts'));
+    if (!snapshot.exists()) return [];
+
+    return Object.entries(snapshot.val())
+        .filter(([key, value]) => value.author === handle)
+        .map(([key, value]) => {
+            return {
+                ...value,
+                id: key,
+                likedBy: value.likedBy ? Object.keys(value.likedBy) : [],
+                createdOn: new Date(value.createdOn).toString(),
+            };
+        });
+}; */
+
