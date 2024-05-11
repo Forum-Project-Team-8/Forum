@@ -69,9 +69,11 @@ export default function Post({ post: initialPost, deletePost }) {
 
     return (
         <div className="post">
-            <p>{post.content}</p>
+            <p>{post.title}</p>
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
+            <p>{post.content}</p>
             <Link to={`/posts/${post.id}`}>View</Link>
+            <p></p>
             {post?.likedBy.includes(userData?.handle)
                 ? <button onClick={dislike}>Dislike</button>
                 : <button onClick={like}>Like</button>

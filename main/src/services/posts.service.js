@@ -1,15 +1,15 @@
 import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
-export const addPost = async(author, content) => {
+export const addPost = async(author, title, content) => {
     const post = {
         author,
+        title,
         content,
         createdOn: Date.now(),
     };
-
+    console.dir(post);
     const result = await push(ref(db, 'posts'), post);
-    console.log(result.key);
     return result.key;
 };
 
