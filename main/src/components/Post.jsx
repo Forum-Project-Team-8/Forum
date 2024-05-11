@@ -19,7 +19,7 @@ import { likePost, dislikePost, getPostById, addReply } from '../services/posts.
 //         }
 //     };
 
-export default function Post({ post: initialPost }) {
+export default function Post({ post: initialPost, deletePost }) {
     const { userData } = useContext(AppContext);
     const [replyContent, setReplyContent] = useState('');
     const [post, setPost] = useState(initialPost);
@@ -63,6 +63,10 @@ export default function Post({ post: initialPost }) {
         }
     };
 
+    const handleDelete = () => {
+        deletePost(post.id);
+    };
+
     return (
         <div className="post">
             <p>{post.content}</p>
@@ -72,6 +76,11 @@ export default function Post({ post: initialPost }) {
                 ? <button onClick={dislike}>Dislike</button>
                 : <button onClick={like}>Like</button>
             }
+
+{userData && (userData.handle === post.author || userData.isAdmin) && (
+                <button onClick={handleDelete}>Delete</button>
+            )}
+
             <p>Likes: {post.likedBy.length}</p>
     
     {post.replies && Object.values(post.replies).map((reply, index) => (
@@ -100,5 +109,6 @@ Post.propTypes = {
         content: PropTypes.string.isRequired,
         createdOn: PropTypes.string,
         likedBy: PropTypes.array,
+        deletePost: PropTypes.func,
     })
 }

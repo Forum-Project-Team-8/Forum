@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { getAllPosts } from "../services/posts.service";
 import Post from "./Post";
 import { useSearchParams } from "react-router-dom";
-import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey, onChildChanged } from 'firebase/database';
+import { ref, remove, onChildChanged } from 'firebase/database';
 import { db } from "../config/firebase-config";
 
 export default function AllPosts() {
@@ -38,13 +38,22 @@ export default function AllPosts() {
         });
     }, []);
 
+    const deletePost = async (postId) => {
+        try {
+            await remove(ref(db, `posts/${postId}`));
+            setPosts(posts => posts.filter(post => post.id !== postId));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
+
     return (
         <div>
             <h1>All posts</h1>
             <label htmlFor="search">Search</label>
             <input value={search} onChange={e => setSearch(e.target.value)} type="text" name="search" id="search" />
             {posts.map((post) => (
-                <Post key={post.id} post={post}/>
+                <Post key={post.id} post={post} deletePost={deletePost}/>
             ))}
 
         </div>
