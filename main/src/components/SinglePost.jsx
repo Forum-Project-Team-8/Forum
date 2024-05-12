@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { getPostById } from "../services/posts.service";
-import { ref, remove, onValue } from 'firebase/database';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getPostById, updatePost } from "../services/posts.service";
+import { ref, remove, onValue, update } from 'firebase/database';
 import { db } from "../config/firebase-config";
 import Post from "./Post";
-//import { useHistory } from "react-router-dom";
+
 
 export default function SinglePost() {
     const [post, setPost] = useState(null);
@@ -26,22 +26,28 @@ export default function SinglePost() {
         });
     }, [id]);
 
-    //const history = useHistory();
-
     const deletePost = async () => {
         try {
             await remove(ref(db, `posts/${id}`));
             setPost(null);
-            //history.push('/posts'); // navigate to AllPosts view
         } catch (error) {
             console.error('Error deleting post:', error);
         }
     };
-
+    const editPost = async (postId, updatedPost) => {
+        try {
+            await updatePost(postId, updatedPost);
+        } catch (error) {
+            console.error('Error updating post:', error);
+            throw error; 
+        }
+    };
+    
     return (
         <div>
             <h1>Single Post</h1>
-            {post ? <Post post={post} deletePost={deletePost}  /> : 'Post deleted successfully.'}
+            {post ? <Post post={post} deletePost={deletePost} editPost={(updatedPost) => editPost(id, updatedPost)}
+                 /> : 'Post deleted successfully.'}
         </div>
     )
 }

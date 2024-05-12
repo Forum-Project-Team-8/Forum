@@ -84,3 +84,14 @@ export const getUsers = async () => {
 
     return Object.entries(snapshot.val());
 };
+
+export const updatePost = async (postId, updatedPostData) => {
+    const postRef = ref(db, `posts/${postId}`);
+    try {
+        await set(postRef, updatedPostData); // Update the post data in the database
+        console.log("Post updated successfully");
+    } catch (error) {
+        console.error("Error updating post:", error);
+        throw error;
+    }
+};
