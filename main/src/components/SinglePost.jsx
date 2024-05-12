@@ -14,7 +14,7 @@ export default function SinglePost() {
         return onValue(ref(db, `posts/${id}`), async snapshot => {
             const val = snapshot.val();
             if (val) {
-                // Fetch the author's data
+                
                 const authorSnapshot = await get(child(ref(db, 'users'), val.author));
                 const author = authorSnapshot.val();
                 console.log('author', author);
@@ -22,7 +22,7 @@ export default function SinglePost() {
                 setPost({
                     ...val,
                     id,
-                    author: author.handle, // Add the author's data to the post
+                    author: author.handle, 
                     likedBy: val.likedBy ? Object.keys(val.likedBy) : [],
                     createdOn: new Date(val.createdOn).toString(),
                 });
@@ -37,19 +37,19 @@ export default function SinglePost() {
             await remove(ref(db, `posts/${id}`));
             await removeTagsFromPost(id);
     
-            // Get the user by their handle
+            
             const usersRef = ref(db, 'users');
             console.log(post)
-            const userSnapshot = await get(child(usersRef, post.author)); // use post.author.handle as the user handle
+            const userSnapshot = await get(child(usersRef, post.author)); 
     
             if (userSnapshot.exists()) {
                 const user = userSnapshot.val();
     
-                // Check if the user has this post in their posts object
+                
                 if (user.posts && user.posts[id]) {
-                    // Remove the post ID from the user's posts object
+                    
                     console.log(post.author.handle)
-                    await remove(ref(db, `users/${post.author}/posts/${id}`)); // use post.author.handle as the user handle
+                    await remove(ref(db, `users/${post.author}/posts/${id}`)); 
                 }
             }
     
@@ -82,7 +82,7 @@ export default function SinglePost() {
     const deleteReply = async (replyId) => {
         try {
             await remove(ref(db, `replies/${replyId}`));
-            fetchPost(); // Fetch the post again to update the replies
+            fetchPost(); 
         } catch (error) {
             console.error('Error deleting reply:', error);
         }

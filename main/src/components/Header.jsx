@@ -28,7 +28,7 @@ export default function Header() {
             {showContentAdmin && <AdminPanel />}
 
             <Button onClick={() => setShowContent(!showContent)}>User</Button> 
-            {showContent && ( // Render content based on showContent state
+            {showContent && ( 
                 <>
                     {user ? (
                         <>         

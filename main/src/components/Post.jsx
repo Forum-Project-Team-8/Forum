@@ -56,7 +56,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
     const deleteReply = async (replyId) => {
         try {
             await remove(ref(db, `posts/${post.id}/replies/${replyId}`));
-            fetchPost(); // Fetch the post again to update the replies
+            fetchPost(); 
             console.dir(post.replies)
         } catch (error) {
             console.error('Error deleting reply:', error);

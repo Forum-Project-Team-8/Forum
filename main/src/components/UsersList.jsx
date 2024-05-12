@@ -153,7 +153,7 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
 return (
   <div>
       {showPosts ? (
-          // Display the posts if showPosts is true
+          
           userPosts && userPosts.map((post, index) => (
               <div key={index}>
                   <p>{post.title}</p>
@@ -161,7 +161,7 @@ return (
               </div>
           ))
       ) : (
-          // Otherwise, display the user list
+          
           <>
               <h2>Users List</h2>
               <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search" />
