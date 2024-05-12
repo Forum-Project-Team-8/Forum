@@ -59,7 +59,7 @@ export const dislikePost = async(postId, handle) => {
     update(ref(db), updateVal);
 };
 
-export const addReply = async(postId, author, content) => {
+export const addReply = async(postId, content, author) => {
     const reply = {
         author,
         content,
