@@ -9,6 +9,28 @@ export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
     const search = searchParams.get('search') || '';
+    const [sortOption, setSortOption] = useState('username');
+
+        const sortedPosts = [...posts].sort((a, b) => {
+        switch (sortOption) {
+            case 'username':
+                return a.author.localeCompare(b.author);
+            case 'dateAsc':
+                return new Date(a.createdOn) - new Date(b.createdOn);
+            case 'dateDesc':
+                return new Date(b.createdOn) - new Date(a.createdOn);
+            case 'latestActivity':
+                const aLatest = a.replies ? Math.max(new Date(a.createdOn), ...Object.values(a.replies).map(reply => new Date(reply.createdOn))) : new Date(a.createdOn);
+                const bLatest = b.replies ? Math.max(new Date(b.createdOn), ...Object.values(b.replies).map(reply => new Date(reply.createdOn))) : new Date(b.createdOn);
+                return bLatest - aLatest;
+            case 'mostComments':
+                const aComments = a.replies ? Object.keys(a.replies).length : 0;
+                const bComments = b.replies ? Object.keys(b.replies).length : 0;
+                return bComments - aComments;
+            default:
+                return 0;
+        }
+    });
 
     const setSearch = (value) => {
         setSearchParams({search: value});
@@ -18,25 +40,18 @@ export default function AllPosts() {
         getAllPosts(search).then(setPosts);
     }, [search]);
 
-    useEffect(() => {
-        return onChildChanged(ref(db, 'posts'), snapshot => {
-            const value = snapshot.val();
-            setPosts(posts => posts.map(t => {
-                console.log(value);
-                if (t.author === value.author && t.content === value.content) {
-                    if (value.likedBy) {
-                        t.likedBy = Object.keys(value.likedBy);
-                    } else {
-                        t.likedBy = [];
-                    }
-
-                    return t;
-                } else {
-                    return t;
-                }
-            }))
-        });
-    }, []);
+// useEffect(() => {
+//     const postRef = ref(db, 'posts');
+//     onChildChanged(postRef, (snapshot) => {
+//         getAllPosts().then((posts) => {
+//             const filteredPosts = posts.filter((post) =>
+//                 post.title.toLowerCase().includes(search.toLowerCase()) 
+//                 //post.content.toLowerCase().includes(search.toLowerCase())
+//             );
+//             setPosts(filteredPosts);
+//         });
+//     });
+// }, [search]);
 
     const deletePost = async (postId) => {
         try {
@@ -50,12 +65,22 @@ export default function AllPosts() {
     return (
         <div>
             <h1>All posts</h1>
-            <label htmlFor="search">Search</label>
-            <input value={search} onChange={e => setSearch(e.target.value)} type="text" name="search" id="search" />
-            {posts.map((post) => (
+            <input
+                type="text"
+                placeholder="Search"
+                onChange={e => setSearch(e.target.value)}
+            />
+            <label htmlFor="sort">Sort by:</label>
+            <select id="sort" value={sortOption} onChange={e => setSortOption(e.target.value)}>
+                <option value="username">Username</option>
+                <option value="dateAsc">Date (oldest first)</option>
+                <option value="dateDesc">Date (newest first)</option>
+                <option value="latestActivity">Latest Activity</option>
+                <option value="mostComments">Most Comments</option>
+            </select>
+            {sortedPosts.map((post) => (
                 <Post key={post.id} post={post} deletePost={deletePost}/>
             ))}
-
         </div>
-    )
+    );
 }
