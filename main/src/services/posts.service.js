@@ -27,7 +27,8 @@ export const getAllPosts = async(search) => {
                 createdOn: new Date(value.createdOn).toString(),
             }
         })
-        .filter(t => (t.content.toLowerCase().includes(search.toLowerCase())) || (t.title.toLowerCase().includes(search.toLowerCase())));
+        .filter(t => (t.content.toLowerCase().includes(search.toLowerCase())) || (t.title.toLowerCase().includes(search.toLowerCase()))
+        || (t.author === search));
 };
 
 export const getPostById = async(id) => {
