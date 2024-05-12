@@ -5,26 +5,13 @@ import { AppContext } from '../context/AppContext';
 import { likePost, dislikePost, getPostById, addReply } from '../services/posts.service';
 import { ref, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
-// export default function Post({ post }) {
-//     const { userData } = useContext(AppContext);
-//     const [replyContent, setReplyContent] = useState('');
-//     const like = () => likePost(post.id, userData.handle);
-//     const dislike = () => dislikePost(post.id, userData.handle);
-//     const submitReply = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const replyId = await addReply(post.id, replyContent, userData.handle);
-//             console.log(`Added reply with ID: ${replyId}`);
-//             setReplyContent('');
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     };
 
-export default function Post({ post: initialPost, deletePost }) {
+export default function Post({ post: initialPost, deletePost, editPost }) {
     const { userData } = useContext(AppContext);
     const [replyContent, setReplyContent] = useState('');
     const [post, setPost] = useState(initialPost);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedContent, setEditedContent] = useState(post.content);
 
     useEffect(() => {
         fetchPost();
@@ -34,9 +21,6 @@ export default function Post({ post: initialPost, deletePost }) {
         const fetchedPost = await getPostById(initialPost.id);
         setPost(fetchedPost);
     };
-
-    // const like = () => likePost(post.id, userData.handle);
-    // const dislike = () => dislikePost(post.id, userData.handle);
 
     const like = async () => {
         await likePost(post.id, userData.handle);
@@ -50,7 +34,6 @@ export default function Post({ post: initialPost, deletePost }) {
 
     const submitReply = async (e) => {
         e.preventDefault();
-        console.log(userData.isBlocked)
         if (userData.isBlocked) {
             console.error('Cannot add reply: User is blocked.');
             return;
@@ -79,9 +62,27 @@ export default function Post({ post: initialPost, deletePost }) {
         deletePost(post.id);
     };
 
+    const startEditing = () => {
+        setIsEditing(true);
+    };
+
+    const saveEdit = async () => {
+        const updatedPost = { ...post, content: editedContent };
+        await editPost(updatedPost);
+        setIsEditing(false);
+        fetchPost();
+    };
+
     return (
         <div className="post">
-            <p>{post.title}</p>
+            {isEditing ? (
+                <textarea
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                />
+            ) : (
+                <p>{post.title}</p>
+            )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
             <p>{post.content}</p>
             <Link to={`/posts/${post.id}`}>View</Link>
@@ -91,8 +92,15 @@ export default function Post({ post: initialPost, deletePost }) {
                 : <button onClick={like}>Like</button>
             }
 
-{userData && (userData.handle === post.author || userData.isAdmin) && (
-                <button onClick={handleDelete}>Delete</button>
+            {userData && (userData.handle === post.author || userData.isAdmin) && (
+                <>
+                    <button onClick={handleDelete}>Delete</button>
+                    {isEditing ? (
+                        <button onClick={saveEdit}>Save</button>
+                    ) : (
+                        <button onClick={startEditing}>Edit</button>
+                    )}
+                </>
             )}
 
             <p>Likes: {post.likedBy.length}</p>
@@ -130,6 +138,7 @@ Post.propTypes = {
         content: PropTypes.string.isRequired,
         createdOn: PropTypes.string,
         likedBy: PropTypes.array,
-        deletePost: PropTypes.func,
-    })
+    }),
+    deletePost: PropTypes.func,
+    editPost: PropTypes.func,
 }
