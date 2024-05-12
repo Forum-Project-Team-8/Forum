@@ -1,11 +1,12 @@
 import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
-export const addPost = async(author, title, content) => {
+export const addPost = async(author, title, content, tags) => {
     const post = {
         author,
         title,
         content,
+        tags,
         createdOn: Date.now(),
     };
     console.dir(post);
@@ -14,11 +15,30 @@ export const addPost = async(author, title, content) => {
 };
 
 export const getAllPosts = async(search) => {
-    const snapshot = await get(ref(db, 'posts'));
-    if (!snapshot.exists()) return [];
+    const postsSnapshot = await get(ref(db, 'posts'));
+    const tagsSnapshot = await get(ref(db, 'tags'));
+    let posts = {};
+
+    if (postsSnapshot.exists()) {
+        posts = postsSnapshot.val();
+    }
+
+    let tagPosts = {};
+    if (tagsSnapshot.exists()) {
+        const tags = tagsSnapshot.val();
+        const tagKeys = Object.keys(tags).filter(tag => tag.toLowerCase() === search.toLowerCase());
+        if (tagKeys.length > 0) {
+            const postIds = Object.keys(tags[tagKeys[0]]);
+            postIds.forEach(postId => {
+                if (posts[postId]) {
+                    tagPosts[postId] = posts[postId];
+                }
+            });
+        }
+    }
 
     return Object
-        .entries(snapshot.val())
+        .entries(posts)
         .map(([key, value]) => {
             return {
                 ...value,
@@ -28,7 +48,7 @@ export const getAllPosts = async(search) => {
             }
         })
         .filter(t => (t.content.toLowerCase().includes(search.toLowerCase())) || (t.title.toLowerCase().includes(search.toLowerCase()))
-        || (t.author === search));
+        || (t.author === search) || tagPosts[t.id]);
 };
 
 export const getPostById = async(id) => {

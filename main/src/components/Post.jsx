@@ -109,16 +109,16 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                 : <button onClick={like}>Like</button>
             }
 
-{isSingleView && userData && (userData.handle === post.author || userData.isAdmin) && (
+{isSingleView && userData && (userData.handle === post.author || userData.isAdmin) && !userData.isBlocked && (
     <>
         <button onClick={handleDelete}>Delete</button>
         {userData && userData.handle === post.author && (
-    isEditing ? (
-        <button onClick={saveEdit}>Save</button>
-    ) : (
-        <button onClick={startEditing}>Edit</button>
-    )
-)}
+            isEditing ? (
+                <button onClick={saveEdit}>Save</button>
+            ) : (
+                <button onClick={startEditing}>Edit</button>
+            )
+        )}
     </>
 )}
 
@@ -136,7 +136,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                 reply.content
             )}</p>
             <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
-            {userData && userData.handle === reply.author && (
+            {userData && userData.handle === reply.author && !userData.isBlocked && (
                 <>
                     <button onClick={() => deleteReply(replyId)}>Delete Reply</button>
                     {isEditingReply && editedReplyId === replyId ? (
@@ -149,6 +149,10 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
         </div>
     );
 })}
+
+{isSingleView && post.tags && post.tags.map((tag, index) => (
+                <span key={index}>#{tag}{index !== post.tags.length - 1 && ' '}</span>
+            ))}
     
             <form onSubmit={submitReply}>
                 <textarea
