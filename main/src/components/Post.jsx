@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 import { likePost, dislikePost, getPostById, addReply } from '../services/posts.service';
+import { ref, remove } from 'firebase/database';
+import { db } from '../config/firebase-config';
 // export default function Post({ post }) {
 //     const { userData } = useContext(AppContext);
 //     const [replyContent, setReplyContent] = useState('');
@@ -63,6 +65,16 @@ export default function Post({ post: initialPost, deletePost }) {
         }
     };
 
+    const deleteReply = async (replyId) => {
+        try {
+            await remove(ref(db, `posts/${post.id}/replies/${replyId}`));
+            fetchPost(); // Fetch the post again to update the replies
+            console.dir(post.replies)
+        } catch (error) {
+            console.error('Error deleting reply:', error);
+        }
+    };
+
     const handleDelete = () => {
         deletePost(post.id);
     };
@@ -85,12 +97,19 @@ export default function Post({ post: initialPost, deletePost }) {
 
             <p>Likes: {post.likedBy.length}</p>
     
-    {post.replies && Object.values(post.replies).map((reply, index) => (
-    <div key={index}>
-        <p>{reply.content}</p>
-        <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
-    </div>
-))}
+            {post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
+    console.log('userData.handle:', userData.handle);
+    console.log('reply.author:', reply.author);
+    return (
+        <div key={replyId}>
+            <p>{reply.content}</p>
+            <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
+            {userData && (userData.handle === reply.author || userData.isAdmin) && (
+                <button onClick={() => deleteReply(replyId)}>Delete Reply</button>
+            )}
+        </div>
+    );
+})}
     
             <form onSubmit={submitReply}>
                 <textarea
