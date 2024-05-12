@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPostById, updatePost } from "../services/posts.service";
 import { ref, remove, onValue, update, get, child } from 'firebase/database';
-import { db } from "../config/firebase-config";
+import { auth, db } from "../config/firebase-config";
 import Post from "./Post";
 
 
@@ -11,12 +11,18 @@ export default function SinglePost() {
     const { id } = useParams();
 
     useEffect(() => {
-        return onValue(ref(db, `posts/${id}`), snapshot => {
+        return onValue(ref(db, `posts/${id}`), async snapshot => {
             const val = snapshot.val();
             if (val) {
+                // Fetch the author's data
+                const authorSnapshot = await get(child(ref(db, 'users'), val.author));
+                const author = authorSnapshot.val();
+                console.log('author', author);
+    
                 setPost({
                     ...val,
                     id,
+                    author: author.handle, // Add the author's data to the post
                     likedBy: val.likedBy ? Object.keys(val.likedBy) : [],
                     createdOn: new Date(val.createdOn).toString(),
                 });
@@ -30,11 +36,29 @@ export default function SinglePost() {
         try {
             await remove(ref(db, `posts/${id}`));
             await removeTagsFromPost(id);
+    
+            // Get the user by their handle
+            const usersRef = ref(db, 'users');
+            console.log(post)
+            const userSnapshot = await get(child(usersRef, post.author)); // use post.author.handle as the user handle
+    
+            if (userSnapshot.exists()) {
+                const user = userSnapshot.val();
+    
+                // Check if the user has this post in their posts object
+                if (user.posts && user.posts[id]) {
+                    // Remove the post ID from the user's posts object
+                    console.log(post.author.handle)
+                    await remove(ref(db, `users/${post.author}/posts/${id}`)); // use post.author.handle as the user handle
+                }
+            }
+    
             setPost(null);
         } catch (error) {
             console.error('Error deleting post:', error);
         }
     };
+
     const removeTagsFromPost = async (postId) => {
         const tagsRef = ref(db, 'tags');
         const tagsSnapshot = await get(tagsRef);

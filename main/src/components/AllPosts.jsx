@@ -19,10 +19,25 @@ export default function AllPosts() {
                 return new Date(a.createdOn) - new Date(b.createdOn);
             case 'dateDesc':
                 return new Date(b.createdOn) - new Date(a.createdOn);
-            case 'latestActivity':
-                const aLatest = a.replies ? Math.max(new Date(a.createdOn), ...Object.values(a.replies).map(reply => new Date(reply.createdOn))) : new Date(a.createdOn);
-                const bLatest = b.replies ? Math.max(new Date(b.createdOn), ...Object.values(b.replies).map(reply => new Date(reply.createdOn))) : new Date(b.createdOn);
-                return bLatest - aLatest;
+                case 'latestActivity':
+                    const aHasReplies = a.replies && Object.keys(a.replies).length > 0;
+                    const bHasReplies = b.replies && Object.keys(b.replies).length > 0;
+        
+                    // If both posts have replies or both posts don't have replies, sort by date
+                    if ((aHasReplies && bHasReplies) || (!aHasReplies && !bHasReplies)) {
+                        const aLatest = a.replies ? Math.max(new Date(a.createdOn), ...Object.values(a.replies).map(reply => new Date(reply.createdOn))) : new Date(a.createdOn);
+                        const bLatest = b.replies ? Math.max(new Date(b.createdOn), ...Object.values(b.replies).map(reply => new Date(reply.createdOn))) : new Date(b.createdOn);
+                        return bLatest - aLatest;
+                    }
+                    // If post a has replies and post b doesn't, put post a first
+                    else if (aHasReplies && !bHasReplies) {
+                        return -1;
+                    }
+                    // If post b has replies and post a doesn't, put post b first
+                    else if (!aHasReplies && bHasReplies) {
+                        return 1;
+                    }
+                    break;
             case 'mostComments':
                 const aComments = a.replies ? Object.keys(a.replies).length : 0;
                 const bComments = b.replies ? Object.keys(b.replies).length : 0;
