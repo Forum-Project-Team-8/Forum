@@ -96,6 +96,17 @@ export const updatePost = async (postId, updatedPostData) => {
     }
 };
 
+export const editReply = async(postId, replyId, content) => {
+    const updatedReply = {
+        content,
+        updatedOn: Date.now(),
+    };
+
+    const replyRef = ref(db, `posts/${postId}/replies/${replyId}`);
+    await update(replyRef, updatedReply);
+    console.log("Reply updated successfully");
+};
+
 /* export const getPostByUser = async (handle) => {
     const snapshot = await get(ref(db, 'posts'));
     if (!snapshot.exists()) return [];

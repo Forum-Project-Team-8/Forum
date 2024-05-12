@@ -61,7 +61,7 @@ export default function SinglePost() {
         <div>
             <h1>Single Post</h1>
             {post ? <Post post={post} deletePost={deletePost} editPost={(updatedPost) => editPost(id, updatedPost)}
-                deleteReply={deleteReply} fetchPost={fetchPost}/> : 'Post deleted successfully.'}
+                deleteReply={deleteReply} fetchPost={fetchPost} isSingleView={true}/> : 'Post deleted successfully.'}
         </div>
     )
 }

@@ -5,13 +5,18 @@ import { AppContext } from '../context/AppContext';
 import { likePost, dislikePost, getPostById, addReply } from '../services/posts.service';
 import { ref, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
+import { editReply } from '../services/posts.service';
 
-export default function Post({ post: initialPost, deletePost, editPost }) {
+export default function Post({ post: initialPost, deletePost, editPost, isSingleView }) {
     const { userData } = useContext(AppContext);
     const [replyContent, setReplyContent] = useState('');
     const [post, setPost] = useState(initialPost);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(post.content);
+    const [isEditingReply, setIsEditingReply] = useState(false);
+    const [editedReply, setEditedReply] = useState('');
+    const [editedReplyId, setEditedReplyId] = useState(null);
+
 
     useEffect(() => {
         fetchPost();
@@ -73,6 +78,18 @@ export default function Post({ post: initialPost, deletePost, editPost }) {
         fetchPost();
     };
 
+    const startEditingReply = (replyId, content) => {
+        setEditedReplyId(replyId);
+        setEditedReply(content);
+        setIsEditingReply(true);
+    };
+    
+    const saveEditReply = async (replyId) => {
+                await editReply(post.id, replyId, editedReply);
+        setIsEditingReply(false);
+        fetchPost();
+    };
+
     return (
         <div className="post">
             {isEditing ? (
@@ -92,28 +109,42 @@ export default function Post({ post: initialPost, deletePost, editPost }) {
                 : <button onClick={like}>Like</button>
             }
 
-            {userData && (userData.handle === post.author || userData.isAdmin) && (
-                <>
-                    <button onClick={handleDelete}>Delete</button>
-                    {isEditing ? (
-                        <button onClick={saveEdit}>Save</button>
-                    ) : (
-                        <button onClick={startEditing}>Edit</button>
-                    )}
-                </>
-            )}
+{isSingleView && userData && (userData.handle === post.author || userData.isAdmin) && (
+    <>
+        <button onClick={handleDelete}>Delete</button>
+        {userData && userData.handle === post.author && (
+    isEditing ? (
+        <button onClick={saveEdit}>Save</button>
+    ) : (
+        <button onClick={startEditing}>Edit</button>
+    )
+)}
+    </>
+)}
 
             <p>Likes: {post.likedBy.length}</p>
     
             {post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
-    console.log('userData.handle:', userData.handle);
-    console.log('reply.author:', reply.author);
     return (
         <div key={replyId}>
-            <p>{reply.content}</p>
+            <p>{isEditingReply && editedReplyId === replyId ? (
+                <textarea
+                    value={editedReply}
+                    onChange={(e) => setEditedReply(e.target.value)}
+                />
+            ) : (
+                reply.content
+            )}</p>
             <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
-            {userData && (userData.handle === reply.author || userData.isAdmin) && (
-                <button onClick={() => deleteReply(replyId)}>Delete Reply</button>
+            {userData && userData.handle === reply.author && (
+                <>
+                    <button onClick={() => deleteReply(replyId)}>Delete Reply</button>
+                    {isEditingReply && editedReplyId === replyId ? (
+                        <button onClick={() => saveEditReply(replyId)}>Save</button>
+                    ) : (
+                        <button onClick={() => startEditingReply(replyId, reply.content)}>Edit</button>
+                    )}
+                </>
             )}
         </div>
     );
@@ -141,4 +172,5 @@ Post.propTypes = {
     }),
     deletePost: PropTypes.func,
     editPost: PropTypes.func,
+    isSingleView: PropTypes.bool,
 }
