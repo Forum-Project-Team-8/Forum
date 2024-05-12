@@ -1,15 +1,15 @@
 import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
-export const addPost = async(author, content) => {
+export const addPost = async(author, title, content) => {
     const post = {
         author,
+        title,
         content,
         createdOn: Date.now(),
     };
-
+    console.dir(post);
     const result = await push(ref(db, 'posts'), post);
-    console.log(result.key);
     return result.key;
 };
 
@@ -59,7 +59,7 @@ export const dislikePost = async(postId, handle) => {
     update(ref(db), updateVal);
 };
 
-export const addReply = async(postId, author, content) => {
+export const addReply = async(postId, content, author) => {
     const reply = {
         author,
         content,
@@ -95,3 +95,19 @@ export const updatePost = async (postId, updatedPostData) => {
         throw error;
     }
 };
+
+/* export const getPostByUser = async (handle) => {
+    const snapshot = await get(ref(db, 'posts'));
+    if (!snapshot.exists()) return [];
+
+    return Object.entries(snapshot.val())
+        .filter(([key, value]) => value.author === handle)
+        .map(([key, value]) => {
+            return {
+                ...value,
+                id: key,
+                likedBy: value.likedBy ? Object.keys(value.likedBy) : [],
+                createdOn: new Date(value.createdOn).toString(),
+            };
+        });
+}; */

@@ -34,6 +34,20 @@ export default function SinglePost() {
             console.error('Error deleting post:', error);
         }
     };
+
+    const deleteReply = async (replyId) => {
+        try {
+            await remove(ref(db, `replies/${replyId}`));
+            fetchPost(); // Fetch the post again to update the replies
+        } catch (error) {
+            console.error('Error deleting reply:', error);
+        }
+    };
+
+    const fetchPost = async () => {
+        const fetchedPost = await getPostById(post.id);
+        setPost(fetchedPost);
+    };
     const editPost = async (postId, updatedPost) => {
         try {
             await updatePost(postId, updatedPost);
@@ -47,7 +61,7 @@ export default function SinglePost() {
         <div>
             <h1>Single Post</h1>
             {post ? <Post post={post} deletePost={deletePost} editPost={(updatedPost) => editPost(id, updatedPost)}
-                 /> : 'Post deleted successfully.'}
+                deleteReply={deleteReply} fetchPost={fetchPost}/> : 'Post deleted successfully.'}
         </div>
     )
 }
