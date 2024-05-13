@@ -147,6 +147,8 @@ const toggleAdminStatus = async (handle, currentIsAdmin) => {
       <button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</button>
       <button onClick={() => toggleUserBlock(user.handle, user.isBlocked)}>{user.isBlocked ? 'Unblock' : 'Block'}</button>
       <button onClick={() => fetchUserPosts(user.handle)}>Show Posts</button>
+      <img src={`data:image/jpg;base64,${user.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
+
     </li>
 );
 
@@ -158,6 +160,7 @@ return (
               <div key={index}>
                   <p>{post.title}</p>
                   <p>{post.content}</p>
+                  
               </div>
           ))
       ) : (
