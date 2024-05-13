@@ -49,6 +49,7 @@ export default function Register() {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const { user, setAppState } = useContext(AppContext);
   const navigate = useNavigate();
@@ -76,6 +77,19 @@ export default function Register() {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       alert("Please enter a valid email address.");
+      return false;
+    }
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match.");
+      return false;
+    }
+    if (form.password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return false;
+    }
+  
+    if (!/[a-z]/.test(form.password) || !/[A-Z]/.test(form.password)) {
+      alert("Password must contain both uppercase and lowercase letters.");
       return false;
     }
 
@@ -167,6 +181,16 @@ export default function Register() {
           id="password"
         />
       </FormControl>
+      <FormControl>
+          <FormLabel htmlFor="confirmPassword">Confirm Password:</FormLabel>
+          <Input
+            value={form.confirmPassword}
+            onChange={updateForm("confirmPassword")}
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+          />
+        </FormControl>
       <Button sx={buttonStyles} onClick={register}>Register</Button>
     </Box>
     <Spacer sx={spacerStyle}/>

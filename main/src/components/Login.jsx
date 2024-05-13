@@ -50,11 +50,29 @@ export default function Login() {
     }
   }, [user]);
 
+  // const login = async() => {
+  //   const { user } = await loginUser(form.email, form.password);
+  //   setAppState({ user, userData: null });
+  //   navigate(location.state?.from.pathname || '/');
+  //   alert('Logged in');
+  // };
   const login = async() => {
-    const { user } = await loginUser(form.email, form.password);
-    setAppState({ user, userData: null });
-    navigate(location.state?.from.pathname || '/');
-    alert('Logged in');
+    try {
+      const { user } = await loginUser(form.email, form.password);
+      setAppState({ user, userData: null });
+      navigate(location.state?.from.pathname || '/');
+      alert('Logged in');
+    } catch (error) {
+      if (error.code === 'auth/invalid-credential') {
+        // Handle invalid credentials error
+        alert('Invalid username or password');
+      } else {
+        // Other errors
+        console.error('Firebase Error:', error);
+        alert('An error occurred. Please try again later.');
+      }
+    }
+    
   };
 
   const updateForm = prop => e => {
@@ -89,22 +107,3 @@ export default function Login() {
   )
 }
 
-
-
-// export default function Login() {
-
-//     return (
-//         <div>
-//             <h1>Login</h1>
-//             <form>
-//                 <label>Username</label>
-//                 <input type="text" name="username" />
-//                 <label htmlFor="email">Email: </label>
-//                 <input  type="text" name="email" id="email" />
-//                 <label htmlFor="password">Password: </label>
-//                 <input  type="password" name="password" id="password" /> <br /> <br /><br />
-                
-//             </form>
-//         </div>
-//     )
-// }
