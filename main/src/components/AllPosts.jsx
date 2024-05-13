@@ -4,6 +4,7 @@ import Post from "./Post";
 import { useSearchParams } from "react-router-dom";
 import { ref, remove, onChildChanged } from 'firebase/database';
 import { db } from "../config/firebase-config";
+import './AllPosts.css';
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
@@ -96,6 +97,11 @@ export default function AllPosts() {
             {sortedPosts.map((post) => (
                 <Post key={post.id} post={post} deletePost={deletePost}/>
             ))}
+
+            <div className="ocean">
+                <div className="wave"></div>
+                <div className="wave wave2"></div>
+            </div>
         </div>
     );
 }

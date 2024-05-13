@@ -3,6 +3,7 @@ import { getPosts, getUsers } from '../services/posts.service'; // You'll need t
 import { Box, Spacer, chakra } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react'
 import { keyframes } from '@emotion/react';
+import './AllPosts.css';
 
 const boxStyle = {
  
@@ -117,6 +118,10 @@ export default function Home() {
             </Box>
             <Box sx={boxStyle} m={5}>At this time number of posts are : {postCount}</Box>
             <Box sx={boxStyle} m={5}>At this time number of users are : {userCount}</Box>
+            <div className="ocean">
+                <div className="wave"></div>
+                <div className="wave wave2"></div>
+            </div>
         </div>
     );
 }
