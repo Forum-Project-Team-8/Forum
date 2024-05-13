@@ -34,6 +34,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
 
     useEffect(() => {
         fetchPost();
+        console.log('Post:', post);
     }, []);
 
     const fetchPost = async () => {
@@ -137,8 +138,9 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             )}
 
             <Button onClick={like} colorScheme="green">{`Likes: ${post.likedBy.length}`}</Button>
+            <Button colorScheme="blue">{`Replies: ${post.replies?Object.entries(post.replies).length : 0}`}</Button>
 
-            {post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
+            {isSingleView && post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
                 return (
                     <div key={replyId}>
                         <p>{isEditingReply && editedReplyId === replyId ? (
@@ -169,16 +171,18 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                 <span key={index}>#{tag}{index !== post.tags.length - 1 && ' '}</span>
             ))}
 
-            <form onSubmit={submitReply}>
-                <textarea
-                    value={replyContent}
-                    onChange={(e) => setReplyContent(e.target.value)}
-                    placeholder="Write a reply..."
-                    style={{ height: '200px' }} // Set the height to make it bigger
-                />
-                <br />
-                <Button type="submit" colorScheme="blue">Reply</Button>
-            </form>
+{isSingleView && (
+    <form onSubmit={submitReply}>
+        <textarea
+            value={replyContent}
+            onChange={(e) => setReplyContent(e.target.value)}
+            placeholder="Write a reply..."
+            style={{ height: '200px' }} // Set the height to make it bigger
+        />
+        <br />
+        <Button type="submit" colorScheme="blue">Reply</Button>
+    </form>
+)}
         </div>
     )
 }
