@@ -7,6 +7,7 @@ import { ref, set, update, get, child } from "firebase/database";
 import { db } from "../config/firebase-config";
 import { Image } from "@chakra-ui/react";
 import { color } from "framer-motion";
+import FileUpload from './FileUpload'; 
 
 
 
@@ -19,6 +20,7 @@ export default function CreatePost() {
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
     const [validationMessage, setValidationMessage] = useState('');
+    const [uploadedFileUrl, setUploadedFileUrl] = useState('');
 
 
     const updatePost = (value, key) => {
@@ -41,7 +43,7 @@ export default function CreatePost() {
             return alert('Content must be at least 5 characters long');
         }
 
-        const postId = await addPost(userData.handle, post.title, post.content, tags);
+        const postId = await addPost(userData.handle, post.title, post.content, tags, uploadedFileUrl);
 
         await addTagsToPost(postId, tags);
         await updateUserPosts(userData.handle, postId);
@@ -77,6 +79,10 @@ export default function CreatePost() {
             }
     };
 
+    const handleFileUpload = (dataUrl) => {
+        setUploadedFileUrl(dataUrl);
+    };
+
     return (
         <div>
             <Box>
@@ -102,6 +108,7 @@ export default function CreatePost() {
                         rows="10"
                     />
                 </FormControl>
+                <FileUpload onUpload={handleFileUpload} />
                 <FormControl>
                     <FormLabel textAlign={'center'} htmlFor="input-tags">Tags:</FormLabel>
                     <Input

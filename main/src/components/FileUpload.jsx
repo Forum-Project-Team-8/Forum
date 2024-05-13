@@ -55,7 +55,7 @@ function FileUpload({ onUpload }) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewUrl(reader.result);
-                onUpload(reader.result); // Pass the dataURL to the onUpload function
+                onUpload(reader.result); 
             };
             reader.readAsDataURL(file);
         }

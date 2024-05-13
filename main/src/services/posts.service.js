@@ -1,12 +1,13 @@
 import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
-export const addPost = async(author, title, content, tags) => {
+export const addPost = async(author, title, content, tags, photoUrl) => {
     const post = {
         author,
         title,
         content,
         tags,
+        photoUrl,
         createdOn: Date.now(),
     };
     console.dir(post);
