@@ -5,6 +5,7 @@ import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { createUserHandle, getUserByHandle } from "../services/user.service";
 import { Box, Button, FormControl, FormLabel, Input, Heading } from "@chakra-ui/react";
+import { m } from "framer-motion";
 
 export default function Register() {
 
@@ -14,6 +15,8 @@ export default function Register() {
     fontWeight: 'bold',
     p: 4,
     borderRadius: 'md',
+    width: '400px',
+    margin: '0 auto', 
     filter: 'drop-shadow(0 0 0.75rem #333)',
     ':hover': {
       bg: 'yellow.200',
@@ -25,7 +28,8 @@ export default function Register() {
     color: 'black',
     bg: 'yellow.200',
     fontWeight: 'bold',
-    p: 2,
+    m: 2,
+    p: 1,
     borderRadius: 'md',
     filter: 'drop-shadow(0 0 0.75rem #333)',
     ':hover': {
