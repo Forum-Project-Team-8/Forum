@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { ref, remove, onChildChanged } from 'firebase/database';
 import { db } from "../config/firebase-config";
 import './AllPosts.css';
+import { Box, Heading, Input, Select } from "@chakra-ui/react";
 
 
 export default function AllPosts() {
@@ -79,26 +80,26 @@ export default function AllPosts() {
         }
     };
 
+
+
     return (
-        <div>
-            <h1>All posts</h1>
-            <input
+        <Box>
+            <Heading>All posts</Heading>
+            <Input
                 type="text"
                 placeholder="Search"
-                onChange={e => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
             />
-            <label htmlFor="sort">Sort by:</label>
-            <select id="sort" value={sortOption} onChange={e => setSortOption(e.target.value)}>
+            <Select id="sort" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
                 <option value="username">Username</option>
                 <option value="dateAsc">Date (oldest first)</option>
                 <option value="dateDesc">Date (newest first)</option>
                 <option value="latestActivity">Latest Activity</option>
                 <option value="mostComments">Most Comments</option>
-            </select>
+            </Select>
             {sortedPosts.map((post) => (
-                <Post key={post.id} post={post} deletePost={deletePost}/>
+                <Post key={post.id} post={post} deletePost={deletePost} />
             ))}
-
-        </div>
+        </Box>
     );
 }

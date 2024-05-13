@@ -6,6 +6,20 @@ import { likePost, dislikePost, getPostById, addReply } from '../services/posts.
 import { ref, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { editReply } from '../services/posts.service';
+import { Button, Heading } from '@chakra-ui/react';
+
+const contentPost = {
+    color: '#005f73',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: '1rem',
+    backgroundColor: '#e9d8a6',
+    borderRadius: '1rem',
+    boxShadow: '0 0 10px #ca6702',
+    margin: '1rem',
+
+}
 
 export default function Post({ post: initialPost, deletePost, editPost, isSingleView }) {
     const { userData } = useContext(AppContext);
@@ -98,69 +112,72 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                     onChange={(e) => setEditedContent(e.target.value)}
                 />
             ) : (
-                <p>{post.title}</p>
+                <Heading color={'#0a9396'}>{post.title}</Heading>
             )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
-            <p>{post.content}</p>
+            <Heading sx={contentPost}>{post.content}</Heading>
             <Link to={`/posts/${post.id}`}>View</Link>
             <p></p>
             {post?.likedBy.includes(userData?.handle)
-                ? <button onClick={dislike}>Dislike</button>
-                : <button onClick={like}>Like</button>
+                ? <Button onClick={dislike} colorScheme="yellow">Dislike</Button>
+                : <Button onClick={like} colorScheme="green">Like</Button>
             }
 
-{isSingleView && userData && (userData.handle === post.author || userData.isAdmin) && !userData.isBlocked && (
-    <>
-        <button onClick={handleDelete}>Delete</button>
-        {userData && userData.handle === post.author && (
-            isEditing ? (
-                <button onClick={saveEdit}>Save</button>
-            ) : (
-                <button onClick={startEditing}>Edit</button>
-            )
-        )}
-    </>
-)}
-
-            <p>Likes: {post.likedBy.length}</p>
-    
-            {post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
-    return (
-        <div key={replyId}>
-            <p>{isEditingReply && editedReplyId === replyId ? (
-                <textarea
-                    value={editedReply}
-                    onChange={(e) => setEditedReply(e.target.value)}
-                />
-            ) : (
-                reply.content
-            )}</p>
-            <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
-            {userData && userData.handle === reply.author && !userData.isBlocked && (
+            {isSingleView && userData && (userData.handle === post.author || userData.isAdmin) && !userData.isBlocked && (
                 <>
-                    <button onClick={() => deleteReply(replyId)}>Delete Reply</button>
-                    {isEditingReply && editedReplyId === replyId ? (
-                        <button onClick={() => saveEditReply(replyId)}>Save</button>
-                    ) : (
-                        <button onClick={() => startEditingReply(replyId, reply.content)}>Edit</button>
+                    <Button onClick={handleDelete} colorScheme="red">Delete</Button>
+                    {userData && userData.handle === post.author && (
+                        isEditing ? (
+                            <Button onClick={saveEdit} colorScheme="blue">Save</Button>
+                        ) : (
+                            <Button onClick={startEditing} colorScheme="blue">Edit</Button>
+                        )
                     )}
                 </>
             )}
-        </div>
-    );
-})}
 
-{isSingleView && post.tags && post.tags.map((tag, index) => (
+            <Button onClick={like} colorScheme="green">{`Likes: ${post.likedBy.length}`}</Button>
+
+            {post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
+                return (
+                    <div key={replyId}>
+                        <p>{isEditingReply && editedReplyId === replyId ? (
+                            <textarea
+                                value={editedReply}
+                                onChange={(e) => setEditedReply(e.target.value)}
+                                style={{ height: '200px' }} 
+                            />
+                        ) : (
+                            reply.content
+                        )}</p>
+                        <p>by {reply.author}, {new Date(reply.createdOn).toLocaleDateString('bg-BG')}</p>
+                        {userData && userData.handle === reply.author && !userData.isBlocked && (
+                            <>
+                                <Button onClick={() => deleteReply(replyId)} colorScheme="red">Delete Reply</Button>
+                                {isEditingReply && editedReplyId === replyId ? (
+                                    <Button onClick={() => saveEditReply(replyId)} colorScheme="blue">Save</Button>
+                                ) : (
+                                    <Button onClick={() => startEditingReply(replyId, reply.content)} colorScheme="blue">Edit</Button>
+                                )}
+                            </>
+                        )}
+                    </div>
+                );
+            })}
+
+            {isSingleView && post.tags && post.tags.map((tag, index) => (
                 <span key={index}>#{tag}{index !== post.tags.length - 1 && ' '}</span>
             ))}
-    
+
             <form onSubmit={submitReply}>
                 <textarea
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     placeholder="Write a reply..."
+                    style={{ height: '200px' }} // Set the height to make it bigger
                 />
-                <button type="submit">Reply</button>
+                <br />
+                <Button type="submit" colorScheme="blue">Reply</Button>
             </form>
         </div>
     )

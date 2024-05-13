@@ -2,10 +2,13 @@ import { useContext, useState } from "react"
 import { addPost } from "../services/posts.service"
 import { AppContext } from "../context/AppContext";
 import { updateUserPosts } from "../services/user.service";
-import { Box, Button, FormControl, FormLabel, Input, Textarea } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Heading, Input, Textarea } from "@chakra-ui/react";
 import { ref, set, update, get, child } from "firebase/database";
 import { db } from "../config/firebase-config";
 import { Image } from "@chakra-ui/react";
+import { color } from "framer-motion";
+
+
 
 export default function CreatePost() {
     const [post, setPost] = useState({
@@ -32,20 +35,20 @@ export default function CreatePost() {
         if (post.title.length < 1 || post.title.length > 64) {
             return alert('Title must be between 16 and 64 characters long');
         }
-    
+
         if (post.content.length < 5) {
             return alert('Content must be at least 5 characters long');
         }
-    
+
         const postId = await addPost(userData.handle, post.title, post.content, tags);
-        
+
         await addTagsToPost(postId, tags);
         await updateUserPosts(userData.handle, postId);
         setPost({
             title: '',
             content: '',
         });
-        setTags([]); 
+        setTags([]);
     };
 
     const addTagsToPost = async (postId, tags) => {
@@ -71,9 +74,9 @@ export default function CreatePost() {
     return (
         <div>
             <Box>
-                <h1>Create post</h1>
+                <Heading>Create post</Heading>
                 <FormControl>
-                    <FormLabel htmlFor="input-title">Title:</FormLabel>
+                    <FormLabel textAlign={'center'} htmlFor="input-title">Title:</FormLabel>
                     <Input
                         type="text"
                         value={post.title}
@@ -83,7 +86,7 @@ export default function CreatePost() {
                     />
                 </FormControl>
                 <FormControl>
-                    <FormLabel htmlFor="input-content">Content:</FormLabel>
+                    <FormLabel textAlign={'center'} htmlFor="input-content">Content:</FormLabel>
                     <Textarea
                         value={post.content}
                         onChange={(e) => updatePost(e.target.value, 'content')}
@@ -94,7 +97,7 @@ export default function CreatePost() {
                     />
                 </FormControl>
                 <FormControl>
-                    <FormLabel htmlFor="input-tags">Tags:</FormLabel>
+                    <FormLabel textAlign={'center'} htmlFor="input-tags">Tags:</FormLabel>
                     <Input
                         type="text"
                         value={tagInput}
@@ -103,15 +106,14 @@ export default function CreatePost() {
                         id="input-tags"
                         disabled={tags.length >= 5}
                     />
-                    <Button onClick={addTag} disabled={tags.length >= 5}>Add Tag</Button>
+                    <Button colorScheme="blue" onClick={addTag} disabled={tags.length >= 5}>Add Tag</Button>
                     {tags.length >= 5 && <p>Tags limit reached</p>}
-                    <div>
-                        {tags.map((tag, index) => (
-                            <span key={index}>#{tag}</span>
-                        ))}
-                    </div>
+
+                    {tags.map((tag, index) => (
+                        <span key={index}>#{tag}</span>
+                    ))}
                 </FormControl>
-                <Button onClick={createPost}>Create</Button>
+                <Button colorScheme = "yellow" onClick={createPost}>Create</Button>
             </Box>
             <Box display="grid" gap={4} justifyContent="center">
                 <Image
@@ -123,5 +125,5 @@ export default function CreatePost() {
             </Box>
         </div>
     );
-    
+
 }
