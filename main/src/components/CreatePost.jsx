@@ -5,6 +5,7 @@ import { updateUserPosts } from "../services/user.service";
 import { Box, Button, FormControl, FormLabel, Input, Textarea } from "@chakra-ui/react";
 import { ref, set, update, get, child } from "firebase/database";
 import { db } from "../config/firebase-config";
+import { Image } from "@chakra-ui/react";
 
 export default function CreatePost() {
     const [post, setPost] = useState({
@@ -68,10 +69,7 @@ export default function CreatePost() {
     };
 
     return (
-
-        
-
-     
+        <div>
             <Box>
                 <h1>Create post</h1>
                 <FormControl>
@@ -96,25 +94,34 @@ export default function CreatePost() {
                     />
                 </FormControl>
                 <FormControl>
-        <FormLabel htmlFor="input-tags">Tags:</FormLabel>
-        <Input
-            type="text"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            name="input-tags"
-            id="input-tags"
-            disabled={tags.length >= 5}
-        />
-        <Button onClick={addTag} disabled={tags.length >= 5}>Add Tag</Button>
-        {tags.length >= 5 && <p>Tags limit reached</p>}
-        <div>
-            {tags.map((tag, index) => (
-                <span key={index}>#{tag}</span>
-            ))}
-        </div>
-    </FormControl>
+                    <FormLabel htmlFor="input-tags">Tags:</FormLabel>
+                    <Input
+                        type="text"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        name="input-tags"
+                        id="input-tags"
+                        disabled={tags.length >= 5}
+                    />
+                    <Button onClick={addTag} disabled={tags.length >= 5}>Add Tag</Button>
+                    {tags.length >= 5 && <p>Tags limit reached</p>}
+                    <div>
+                        {tags.map((tag, index) => (
+                            <span key={index}>#{tag}</span>
+                        ))}
+                    </div>
+                </FormControl>
                 <Button onClick={createPost}>Create</Button>
             </Box>
-        );
+            <Box display="grid" gap={4} justifyContent="center">
+                <Image
+                    boxSize='500px'
+                    src='https://images.unsplash.com/photo-1504542982118-59308b40fe0c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    alt='Second Image'
+                    sx={{ border: '4px solid #dbebe8', filter: 'drop-shadow(0 0 0.75rem #D4B590)' }}
+                />
+            </Box>
+        </div>
+    );
     
 }
