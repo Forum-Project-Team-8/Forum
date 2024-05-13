@@ -6,6 +6,7 @@ import { ref, remove, onChildChanged } from 'firebase/database';
 import { db } from "../config/firebase-config";
 import './AllPosts.css';
 
+
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -98,10 +99,6 @@ export default function AllPosts() {
                 <Post key={post.id} post={post} deletePost={deletePost}/>
             ))}
 
-            <div className="ocean">
-                <div className="wave"></div>
-                <div className="wave wave2"></div>
-            </div>
         </div>
     );
 }
