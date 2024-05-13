@@ -15,6 +15,7 @@ export default function CreatePost() {
     const { userData } = useContext(AppContext);
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
+    const [validationMessage, setValidationMessage] = useState('');
 
 
     const updatePost = (value, key) => {
@@ -46,6 +47,7 @@ export default function CreatePost() {
             content: '',
         });
         setTags([]); 
+        setTagInput('');
     };
 
     const addTagsToPost = async (postId, tags) => {
@@ -62,10 +64,14 @@ export default function CreatePost() {
     };
 
     const addTag = () => {
-        if (tags.length < 5 && tagInput !== '') {
+        if (tags.length < 5 && tagInput !== '' && /^[a-z]+$/.test(tagInput)) {
             setTags([...tags, tagInput]);
             setTagInput('');
-        }
+            setValidationMessage('');
+        } else {
+            setValidationMessage('Tags can only be lowercase');
+            setTimeout(() => setValidationMessage(''), 1500);
+            }
     };
 
     return (
@@ -103,6 +109,7 @@ export default function CreatePost() {
                         id="input-tags"
                         disabled={tags.length >= 5}
                     />
+                    <div>{validationMessage}</div>
                     <Button onClick={addTag} disabled={tags.length >= 5}>Add Tag</Button>
                     {tags.length >= 5 && <p>Tags limit reached</p>}
                     <div>
@@ -121,6 +128,7 @@ export default function CreatePost() {
                     sx={{ border: '4px solid #dbebe8', filter: 'drop-shadow(0 0 0.75rem #D4B590)' }}
                 />
             </Box>
+            
         </div>
     );
     
