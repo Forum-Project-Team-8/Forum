@@ -13,6 +13,7 @@ import CreatePost from './components/CreatePost.jsx';
 import AllPosts from './components/AllPosts.jsx';
 import SinglePost from './components/SinglePost.jsx';
 import EditProfile from './components/EditProfile.jsx';
+import AdminPanel from './components/AdminPanel.jsx';
 
   
   function App() {
@@ -65,7 +66,8 @@ import EditProfile from './components/EditProfile.jsx';
               <Route path="/posts-create" element={<CreatePost/>}/>
               <Route path="/posts" element={<AllPosts/>}/>  
               <Route path="/posts/:id" element={<SinglePost/>}/>
-              <Route path="/edit-profile" element={<EditProfile/>}/>       
+              <Route path="/edit-profile" element={<EditProfile/>}/>   
+              <Route path="/admin-panel" element={<AdminPanel/>}/>           
               <Route path="*" element={<header>Not Found</header>}/>
      
             </Routes>

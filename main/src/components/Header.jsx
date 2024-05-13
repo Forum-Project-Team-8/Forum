@@ -17,7 +17,6 @@ const spacerStyle = {
     export default function Header() {
         const { user, userData, setAppState } = useContext(AppContext);
         const [showContent, setShowContent] = useState(false); 
-        const [showContentAdmin, setShowContentAdmin] = useState(false); 
         const navigate = useNavigate();
         const logout = async () => {
             await logoutUser();
@@ -28,9 +27,8 @@ const spacerStyle = {
         return (
             <Flex as="nav" align="center" justify="space-between">
                 {userData && userData.isAdmin && (
-                    <Button onClick={() => setShowContentAdmin(!showContentAdmin)}>Admin</Button>
+                    <NavLink to="/admin-panel" as={Button} variant="link">Admin</NavLink>
                 )}
-                {showContentAdmin && <AdminPanel />}
 
                 <Button onClick={() => setShowContent(!showContent)}>User</Button> 
                 {showContent && ( 
