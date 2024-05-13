@@ -7,6 +7,7 @@ import { ref, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
 import { editReply } from '../services/posts.service';
 import { Button, Heading } from '@chakra-ui/react';
+import { getUserByHandle } from '../services/user.service';
 
 const contentPost = {
     color: '#005f73',
@@ -30,16 +31,25 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
     const [isEditingReply, setIsEditingReply] = useState(false);
     const [editedReply, setEditedReply] = useState('');
     const [editedReplyId, setEditedReplyId] = useState(null);
+    const [authorData, setAuthorData] = useState(null);
 
 
     useEffect(() => {
         fetchPost();
+        fetchAuthorData();
         console.log('Post:', post);
     }, []);
 
     const fetchPost = async () => {
         const fetchedPost = await getPostById(initialPost.id);
         setPost(fetchedPost);
+    };
+
+    const fetchAuthorData = async () => {
+        const data = await getUserByHandle(post.author);
+        console.log(data.val())
+        setAuthorData(data.val());
+        console.log('Author data:', authorData);
     };
 
     const like = async () => {
@@ -116,8 +126,11 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                 <Heading color={'#0a9396'}>{post.title}</Heading>
             )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
+            {authorData && authorData.photoData && (
+    <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
+)}
             <Heading sx={contentPost}>{post.content}</Heading>
-            {isSingleView && post.photoUrl && (
+                        {isSingleView && post.photoUrl && (
     <div>
         <img src={post.photoUrl} alt="Post" style={{ maxWidth: '100%' }} />
     </div>
