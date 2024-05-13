@@ -21,6 +21,7 @@ export default function CreatePost() {
     const [tagInput, setTagInput] = useState('');
     const [validationMessage, setValidationMessage] = useState('');
     const [uploadedFileUrl, setUploadedFileUrl] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
 
     const updatePost = (value, key) => {
@@ -44,6 +45,11 @@ export default function CreatePost() {
         }
 
         const postId = await addPost(userData.handle, post.title, post.content, tags, uploadedFileUrl);
+
+        if (postId) {
+            setSuccessMessage('Post created successfully!');
+            setTimeout(() => setSuccessMessage(''), 3000); // remove the message after 3 seconds
+        }
 
         await addTagsToPost(postId, tags);
         await updateUserPosts(userData.handle, postId);
@@ -128,6 +134,7 @@ export default function CreatePost() {
                     ))}
                 </FormControl>
                 <Button colorScheme = "yellow" onClick={createPost}>Create</Button>
+                {successMessage && <p>{successMessage}</p>}
             </Box>
             <Box display="grid" gap={4} justifyContent="center">
                 <Image

@@ -117,6 +117,11 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
             <Heading sx={contentPost}>{post.content}</Heading>
+            {isSingleView && post.photoUrl && (
+    <div>
+        <img src={post.photoUrl} alt="Post" style={{ maxWidth: '100%' }} />
+    </div>
+)}
             <Link to={`/posts/${post.id}`}>View</Link>
             <p></p>
             {post?.likedBy.includes(userData?.handle)
