@@ -4,14 +4,16 @@ import { registerUser } from "../services/auth.service";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { createUserHandle, getUserByHandle } from "../services/user.service";
-import { Box, Button, FormControl, FormLabel, Input, Heading } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input, Heading, Spacer } from "@chakra-ui/react";
 import { m } from "framer-motion";
+import { Image } from "@chakra-ui/react";
+
 
 export default function Register() {
 
   const boxStyles = {
-    bg: 'tomato',
-    color: 'white',
+    bg: '	#a9bdb9',
+    color: 'black',
     fontWeight: 'bold',
     p: 4,
     borderRadius: 'md',
@@ -19,10 +21,13 @@ export default function Register() {
     margin: '0 auto', 
     filter: 'drop-shadow(0 0 0.75rem #333)',
     ':hover': {
-      bg: 'yellow.200',
+      bg: '#dbebe8',
       color: 'black',
     },
   };
+  const spacerStyle = {
+    h: '20px',
+};
 
   const buttonStyles = { 
     color: 'black',
@@ -108,7 +113,7 @@ export default function Register() {
 
   return (
 
-
+<div>
 
     <Box sx={boxStyles}>
       <Heading>Register</Heading>
@@ -164,5 +169,13 @@ export default function Register() {
       </FormControl>
       <Button sx={buttonStyles} onClick={register}>Register</Button>
     </Box>
+    <Spacer sx={spacerStyle}/>
+    <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={4}>
+       
+       <Image boxSize='500px' src='https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='Second Image' sx={{ borderRadius: 'full', border: '4px solid #cededb', filter: 'drop-shadow(0 0 0.75rem #D4B590)' }} />
+       <Image boxSize='500px' src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='Travel' sx={{ borderRadius: 'full', border: '4px solid #cededb', filter: 'drop-shadow(0 0 0.75rem #D4B590)' }} />
+       <Image boxSize='500px' src='https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1226&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='Second Image' sx={{ borderRadius: 'full', border: '4px solid #cededb', filter: 'drop-shadow(0 0 0.75rem #D4B590)' }} />
+     </Box>
+    </div>
   );
 }

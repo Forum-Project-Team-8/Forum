@@ -19,7 +19,7 @@ export default function Login() {
     margin: '0 auto', 
     filter: 'drop-shadow(0 0 0.75rem #333)',
     ':hover': {
-      bg: 'yellow.200',
+      bg: '#d9c19d',
       color: 'black',
     },
   };
