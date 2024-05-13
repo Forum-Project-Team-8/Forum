@@ -7,9 +7,9 @@ import './Home.css';
 
 const boxStyle = {
  
-        bg: 'lightblue',
+        bg: '#ca6702',
         blur: '5px',
-        color: 'darkblue',
+        color: '	#e9d8a6',
         fontWeight: 'bold',
         p: 2,
         borderRadius: 'md',

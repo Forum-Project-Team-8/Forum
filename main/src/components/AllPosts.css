@@ -15,7 +15,7 @@ body {
   background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
   position: absolute;
   width: 6400px;
-  top: -198px;
+  top: -108px;
   left: 0;
   height: 198px;
   transform: translate(0, 0, 0);
@@ -23,7 +23,7 @@ body {
 }
 
 .wave:nth-of-type(2) {
-  top: -168px;
+  top: -108px;
   animation: swell 4s ease infinite;
   opacity: 1;
 }
