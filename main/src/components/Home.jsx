@@ -7,9 +7,9 @@ import './Home.css';
 
 const boxStyle = {
  
-        bg: 'lightblue',
+        bg: '#ca6702',
         blur: '5px',
-        color: 'darkblue',
+        color: '	#e9d8a6',
         fontWeight: 'bold',
         p: 2,
         borderRadius: 'md',
@@ -18,7 +18,7 @@ const boxStyle = {
 };
 
 const boxStyle2 = { 
-    bg: 'lightblue',
+    bg: '#0a9396',
     blur: '5px',
     color: 'darkgray',
     fontWeight: 'bold',
@@ -29,12 +29,12 @@ const boxStyle2 = {
 };
 
 const headerStyle = {
-    color: 'darkblue',
+    color: '#005f73',
     textShadow: '2px 2px 4px #000000',
     fontSize: '3xl',
     fontWeight: 'bold',
     textAlign: 'center',
-    bg: 'lightblue',
+    bg: '#e9d8a6',
     p: 2,
     borderRadius: 'md',
     filter: 'drop-shadow(0 0 0.75rem #333)',
@@ -43,10 +43,9 @@ const headerStyle = {
 };
 
 const headerStyle2 = {  
-    color: 'darkblue',
-    textShadow: '2px 2px 4px yellow',
+    color: '	#0a9396',
+    textShadow: '2px 2px 4px #ca6702',
     fontSize: '3xl',
-    fontWeight: 'bold',
     textAlign: 'center',
     p: 2,
     borderRadius: 'md',
@@ -68,8 +67,8 @@ const animateText = keyframes`
 `;
 
 const headerStyle3 = {
-    color: 'darkblue',
-    textShadow: '2px 2px 4px yellow',
+    color: '#0a9396',
+    textShadow: '2px 2px 4px #e9d8a6',
     fontSize: '3xl',
     textAlign: 'center',
     p: 2,
