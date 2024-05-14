@@ -50,12 +50,6 @@ export default function Login() {
     }
   }, [user]);
 
-  // const login = async() => {
-  //   const { user } = await loginUser(form.email, form.password);
-  //   setAppState({ user, userData: null });
-  //   navigate(location.state?.from.pathname || '/');
-  //   alert('Logged in');
-  // };
   const login = async() => {
     try {
       const { user } = await loginUser(form.email, form.password);
@@ -64,11 +58,9 @@ export default function Login() {
       alert('Logged in');
     } catch (error) {
       if (error.code === 'auth/invalid-credential') {
-        // Handle invalid credentials error
-        alert('Invalid username or password');
+              alert('Invalid username or password');
       } else {
-        // Other errors
-        console.error('Firebase Error:', error);
+              console.error('Firebase Error:', error);
         alert('An error occurred. Please try again later.');
       }
     }

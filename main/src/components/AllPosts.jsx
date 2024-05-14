@@ -58,17 +58,6 @@ export default function AllPosts() {
         getAllPosts(search).then(setPosts);
     }, [search]);
 
-    const deletePost = async (postId) => {
-        try {
-            await remove(ref(db, `posts/${postId}`));
-            setPosts(posts => posts.filter(post => post.id !== postId));
-        } catch (error) {
-            console.error('Error deleting post:', error);
-        }
-    };
-
-
-
     return (
         <Box>
             <Heading>All posts</Heading>
@@ -85,7 +74,7 @@ export default function AllPosts() {
                 <option value="mostComments">Most Comments</option>
             </Select>
             {sortedPosts.map((post) => (
-                <Post key={post.id} post={post} deletePost={deletePost} />
+                <Post key={post.id} post={post}/>
             ))}
         </Box>
     );

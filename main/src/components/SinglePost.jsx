@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPostById, updatePost } from "../services/posts.service";
-import { ref, remove, onValue, update, get, child } from 'firebase/database';
-import { auth, db } from "../config/firebase-config";
+import { ref, remove, onValue, get, child } from 'firebase/database';
+import { db } from "../config/firebase-config";
 import Post from "./Post";
 
 

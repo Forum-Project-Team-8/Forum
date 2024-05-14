@@ -5,7 +5,6 @@ import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { createUserHandle, getUserByHandle } from "../services/user.service";
 import { Box, Button, FormControl, FormLabel, Input, Heading, Spacer } from "@chakra-ui/react";
-import { m } from "framer-motion";
 import { Image } from "@chakra-ui/react";
 
 

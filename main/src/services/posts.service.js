@@ -1,4 +1,4 @@
-import { ref, push, get, set, update, query, equalTo, orderByChild, orderByKey } from 'firebase/database';
+import { ref, push, get, set, update, child, } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const addPost = async(author, title, content, tags, photoUrl) => {
@@ -127,6 +127,19 @@ export const editReply = async(postId, replyId, content) => {
     const replyRef = ref(db, `posts/${postId}/replies/${replyId}`);
     await update(replyRef, updatedReply);
     console.log("Reply updated successfully");
+};
+
+export const addTagsToPost = async (postId, tags) => {
+    const tagsRef = ref(db, 'tags');
+    tags.forEach(async (tag) => {
+        const tagRef = child(tagsRef, tag);
+        const tagSnapshot = await get(tagRef);
+        if (tagSnapshot.exists()) {
+            await update(tagRef, { [postId]: true });
+        } else {
+            await set(tagRef, { [postId]: true });
+        }
+    });
 };
 
 /* export const getPostByUser = async (handle) => {

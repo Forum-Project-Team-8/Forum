@@ -3,10 +3,8 @@ import { addPost } from "../services/posts.service"
 import { AppContext } from "../context/AppContext";
 import { updateUserPosts } from "../services/user.service";
 import { Box, Button, FormControl, FormLabel, Heading, Input, Textarea } from "@chakra-ui/react";
-import { ref, set, update, get, child } from "firebase/database";
-import { db } from "../config/firebase-config";
+import { addTagsToPost } from "../services/posts.service";
 import { Image } from "@chakra-ui/react";
-import { color } from "framer-motion";
 import FileUpload from './FileUpload'; 
 
 
@@ -36,7 +34,7 @@ export default function CreatePost() {
             console.error('Cannot create post: User is blocked.');
             return;
         }
-        if (post.title.length < 1 || post.title.length > 64) {
+        if (post.title.length < 16 || post.title.length > 64) {
             return alert('Title must be between 16 and 64 characters long');
         }
 
@@ -48,7 +46,7 @@ export default function CreatePost() {
 
         if (postId) {
             setSuccessMessage('Post created successfully!');
-            setTimeout(() => setSuccessMessage(''), 3000); // remove the message after 3 seconds
+            setTimeout(() => setSuccessMessage(''), 3000);
         }
 
         await addTagsToPost(postId, tags);
@@ -59,19 +57,6 @@ export default function CreatePost() {
         });
         setTags([]); 
         setTagInput('');
-    };
-
-    const addTagsToPost = async (postId, tags) => {
-        const tagsRef = ref(db, 'tags');
-        tags.forEach(async (tag) => {
-            const tagRef = child(tagsRef, tag);
-            const tagSnapshot = await get(tagRef);
-            if (tagSnapshot.exists()) {
-                await update(tagRef, { [postId]: true });
-            } else {
-                await set(tagRef, { [postId]: true });
-            }
-        });
     };
 
     const addTag = () => {

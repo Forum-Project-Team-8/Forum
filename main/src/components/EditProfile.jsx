@@ -1,11 +1,9 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import { getUserData, updateUser } from "../services/user.service";
 import { Box, Button, FormControl, FormLabel, Input, Heading, Text } from "@chakra-ui/react";
-import { db, auth } from "../config/firebase-config";
-import { ref, update } from 'firebase/database';
-import { updatePassword } from 'firebase/auth';
 import FileUpload from "./FileUpload";
+import { updateUserData } from "../services/user.service";
+import { getUserData } from "../services/user.service";
 
 export default function EditProfile() {
     const { user } = useContext(AppContext);
@@ -58,69 +56,25 @@ export default function EditProfile() {
             return;
         }
 
-        getUserData(user.uid)
-            .then(async snapshot => {
-                const userData = snapshot.val();
-                if (userData) {
-                    const handle = Object.keys(snapshot.val())[0];
-                    const userRef = ref(db, 'users/' + `${handle}`);
-                    await update(userRef, {
-                        firstname: firstname || snapshot.val()[handle].firstname,
-                        lastname: lastname || snapshot.val()[handle].lastname,
-                        email: email || snapshot.val()[handle].email,
-                        photoData: photoData || snapshot.val()[handle].photoData, // Update photo data
-                    });
+        async function handleUpdateUserData() {
+            try {
+              const snapshot = await getUserData(user.uid);
+              const result = await updateUserData(snapshot, firstname, lastname, email, photoData, password);
+              if (!result.success) {
+                setErrorMessage(result.message);
+              }
+            } catch (error) {
+              console.error(error);
+              setErrorMessage('An error occurred. Please try again later.');
+            }
+          }
+          
+          handleUpdateUserData();
 
-                    if (password) {
-                        await updatePassword(auth.currentUser, password);
-                    }
+        }
 
-                } else {
-                    setErrorMessage('User does not exist');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                setErrorMessage('An error occurred. Please try again later.');
-            });
-    };
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!validateForm()) {
-    //         return;
-    //     }
-
-    //     getUserData(user.uid)
-    //         .then(async snapshot => {
-    //             console.log(snapshot.val());
-    //             console.log(Object.keys(snapshot.val())[0])
-    //             const userData = snapshot.val();
-    //             console.log(userData)
-    //             if (userData) {
-    //                 const handle = Object.keys(snapshot.val())[0];
-    //                 const userRef = ref(db, 'users/' + `${handle}`);
-    //                 await update(userRef, {
-    //                     firstname: firstname || snapshot.val()[handle].firstname,
-    //                     lastname: lastname || snapshot.val()[handle].lastname,
-    //                     email: email || snapshot.val()[handle].email,
-    //                 });
-
-    //                 if (password) {
-    //                     await updatePassword(auth.currentUser, password);
-    //                 }
-
-    //             } else {
-    //                 setErrorMessage('User does not exist');
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error(error);
-    //             setErrorMessage('An error occurred. Please try again later.');
-    //         });
-    // };
     const handleUpload = (dataURL) => {
-        setPhotoData(dataURL.split(',')[1]); // Extract base64 data from dataURL
+        setPhotoData(dataURL.split(',')[1]); 
     };
 
     return (
