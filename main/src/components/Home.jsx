@@ -118,7 +118,7 @@ export default function Home() {
  
     return (
         <div>
-            <chakra.h1 sx={headerStyle}>Travel Paradise Forum</chakra.h1>
+            <chakra.h1 sx={headerStyle}>TRAVEL PARADISE FORUM</chakra.h1>
             <chakra.p sx={headerStyle2}>"Don't dream your life, live your dream!"</chakra.p>
                    <chakra.p sx={headerStyle3}>Welcome to the travel paradise forum. Here you can share your travel experiences, ask questions, and connect with other travel enthusiasts.</chakra.p>
             <Box sx={boxStyle} m={5}>users : {userCount} posts : {postCount} </Box>
