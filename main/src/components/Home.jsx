@@ -131,8 +131,8 @@ export default function Home() {
                 <h2>Top 10 Posts with Most Replies</h2>
                 {topPosts.map((post, index) => (
                     <div key={index}>
-                        <p>{`Title Post ${index + 1}: ` + post[1].title}</p>
-                        <p>{`Replies Post ${index + 1}: ` + (post[1].replies ? Object.keys(post[1].replies).length : 0)}</p>
+                        <p>{`Post ${index + 1}: ` + post[1].title}</p>
+                        <p>{`Replies : ` + (post[1].replies ? Object.keys(post[1].replies).length : 0)}</p>
                         <br />
                     </div>
                 ))}
