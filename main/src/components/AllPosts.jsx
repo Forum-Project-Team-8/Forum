@@ -58,19 +58,6 @@ export default function AllPosts() {
         getAllPosts(search).then(setPosts);
     }, [search]);
 
-// useEffect(() => {
-//     const postRef = ref(db, 'posts');
-//     onChildChanged(postRef, (snapshot) => {
-//         getAllPosts().then((posts) => {
-//             const filteredPosts = posts.filter((post) =>
-//                 post.title.toLowerCase().includes(search.toLowerCase()) 
-//                 //post.content.toLowerCase().includes(search.toLowerCase())
-//             );
-//             setPosts(filteredPosts);
-//         });
-//     });
-// }, [search]);
-
     const deletePost = async (postId) => {
         try {
             await remove(ref(db, `posts/${postId}`));
