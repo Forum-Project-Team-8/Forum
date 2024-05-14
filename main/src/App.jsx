@@ -29,14 +29,13 @@ import AdminPanel from './components/AdminPanel.jsx';
 
     useEffect(() => {
       if (!appState.user) return;
-      console.log("User UID:", appState.user.uid);
+    
 
       getUserData(appState.user.uid)
         .then(snapshot => {
           if (snapshot && snapshot.val()) { 
             setAppState({...appState, userData:Object.values(snapshot.val())[0]});
           } else {
-            // Handle case where snapshot is null or undefined
             console.error("Snapshot is null or undefined.");
           }
 
@@ -44,13 +43,12 @@ import AdminPanel from './components/AdminPanel.jsx';
               
         })
         .catch(error => {
-          // Handle error
-          console.error("Error fetching user data:", error);
+            console.error("Error fetching user data:", error);
         });
     }, [appState.user]);
 
     useEffect(() => {
-      console.log("Updated userData:", appState.userData);
+      
     }, [appState.userData]);
   
 

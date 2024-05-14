@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { db } from "../config/firebase-config";
-import { get, ref, update, remove, child } from 'firebase/database';
 import { Box, Button, Input, VStack, Heading } from '@chakra-ui/react';
 import { toggleUserBlockInDB, toggleAdminStatusInDB, deleteUserInDB, fetchUsersFromDB } from '../services/user.service';
 

@@ -4,10 +4,8 @@
     import { useContext, useState } from "react";
     import { AppContext } from "../context/AppContext";
     import { logoutUser } from "../services/auth.service";
-    import { Button, Flex, Spacer, background, border } from "@chakra-ui/react";
-    import AdminPanel from "./AdminPanel";
+    import { Button, Flex, Spacer } from "@chakra-ui/react";
     import { Box } from "@chakra-ui/react";
-    import { m } from "framer-motion";
 
 
 

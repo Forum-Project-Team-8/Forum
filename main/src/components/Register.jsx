@@ -103,7 +103,7 @@ export default function Register() {
       const user = await getUserByHandle(form.username);
       user.isAdmin = form.isAdmin;
       if (user.exists()) {
-        return console.log("User with this username already exists!");
+        return 
       }
       const credential = await registerUser(form.email, form.password);
       await createUserHandle(

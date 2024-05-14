@@ -1,9 +1,8 @@
+/* eslint-disable no-case-declarations */
 import { useEffect, useState } from "react"
 import { getAllPosts } from "../services/posts.service";
 import Post from "./Post";
 import { useSearchParams } from "react-router-dom";
-import { ref, remove, onChildChanged } from 'firebase/database';
-import { db } from "../config/firebase-config";
 import './AllPosts.css';
 import { Box, Heading, Input, Select } from "@chakra-ui/react";
 

@@ -65,8 +65,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             return;
         }
         try {
-            const replyId = await addReply(post.id, replyContent, userData.handle);
-            console.log(`Added reply with ID: ${replyId}`);
+            await addReply(post.id, replyContent, userData.handle);
             setReplyContent('');
             fetchPost(); 
         } catch (error) {
