@@ -119,7 +119,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             ) : (
                 <Heading color={'#0a9396'}>{post.title}</Heading>
             )}
-            <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
+            <Heading sx={contentPost}>{post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</Heading> 
             {authorData && authorData.photoData && (
             <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%', maxWidth: '50%', display: 'block', margin: '0 auto', paddingTop: '15px' }} alt="No User Photo" />
     
@@ -130,7 +130,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                     <img src={post.photoUrl} alt="Post" style={{ maxWidth: '100%' }} />
                 </div>
             )}
-            <Button bg={'orange'} as={Link} to={`/posts/${post.id}`} colorScheme="blue">View</Button>
+            {!isSingleView && <Button bg={'orange'} as={Link} to={`/posts/${post.id}`} colorScheme="blue">View</Button>}
             <p></p>
             {post?.likedBy.includes(userData?.handle)
                 ? <Button onClick={dislike} colorScheme="yellow">Dislike</Button>

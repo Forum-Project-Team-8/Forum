@@ -151,6 +151,45 @@ export const deleteReplyInDB = async (postId, replyId) => {
     }
   }
 
+  export async function deletePostInDB(id, author) {
+    try {
+      await remove(ref(db, `posts/${id}`));
+        
+      const usersRef = ref(db, 'users');
+      const userSnapshot = await get(child(usersRef, author)); 
+  
+      if (userSnapshot.exists()) {
+          const user = userSnapshot.val();
+  
+          if (user.posts && user.posts[id]) {
+              await remove(ref(db, `users/${author}/posts/${id}`)); 
+          }
+      }
+    } catch (error) {
+      console.error('Error deleting post in DB:', error);
+      throw error; 
+    }
+  }
+
+  export async function fetchPostFromDB(id) {
+    const snapshot = await get(ref(db, `posts/${id}`));
+    const val = snapshot.val();
+    if (val) {
+      const authorSnapshot = await get(child(ref(db, 'users'), val.author));
+      const author = authorSnapshot.val();
+  
+      return {
+        ...val,
+        id,
+        author: author.handle, 
+        likedBy: val.likedBy ? Object.keys(val.likedBy) : [],
+        createdOn: new Date(val.createdOn).toString(),
+      };
+    } else {
+      return null;
+    }
+  }
+
 /* export const getPostByUser = async (handle) => {
     const snapshot = await get(ref(db, 'posts'));
     if (!snapshot.exists()) return [];
