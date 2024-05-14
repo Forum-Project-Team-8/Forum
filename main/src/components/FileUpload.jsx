@@ -23,7 +23,7 @@ function FileUpload({ onUpload }) {
             {previewUrl && (
                 <div>
                     <h2>Preview:</h2>
-                    <img src={previewUrl} alt="Preview" style={{ maxWidth: '5%' }} />
+                    <img src={previewUrl} alt="Preview" style={{ maxWidth: '25%' }} />
                 </div>
             )}
         </div>
