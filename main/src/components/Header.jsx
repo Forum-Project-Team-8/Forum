@@ -4,15 +4,90 @@
     import { useContext, useState } from "react";
     import { AppContext } from "../context/AppContext";
     import { logoutUser } from "../services/auth.service";
-    import { Button, Flex, Spacer } from "@chakra-ui/react";
+    import { Button, Flex, Spacer, background, border } from "@chakra-ui/react";
     import AdminPanel from "./AdminPanel";
     import { Box } from "@chakra-ui/react";
     import { m } from "framer-motion";
 
 
+
 const spacerStyle = {
     m: 0.2,
 };
+
+const buttonStyle4 = {
+    color: '#403072',
+    background: 'lightblue',
+           textShadow: '2px 2px 4px #579cbc',
+    fontSize: '2xl',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #feff27)',
+    m: 2,
+};
+
+const buttonStyle = {
+    border: '2px solid #2d626a',
+    padding: '10px',
+    display: 'inline-block',
+    color: '#d17e7f',
+    textShadow: '2px 2px 4px #f2f299',
+    fontSize: '2xl',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #c8e29d)',
+    m: 2,
+};
+
+const buttonStyle2 = {
+    border: '2px solid #2d626a',
+    padding: '10px',
+    display: 'inline-block',
+    color: '#2d626a',   
+    textShadow: '2px 2px 4px #579cbc',
+    fontSize: '2xl',
+    textAlign: 'center',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #feff27)',
+    m: 2,
+};
+const buttonStyle3 = {
+    border: '2px solid #2d626a',
+    padding: '10px',
+    display: 'inline-block',
+    color: '#2d626a',
+    textShadow: '2px 2px 4px #579cbc',
+    fontSize: '2xl',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #feff27)',
+    m: 2,
+};
+
+const buttonStyle5 = {
+    border: '2px solid #c2787a',
+    padding: '10px',
+background:"#f4cccc" ,
+    display: 'inline-block',
+    color: '#f44336',
+    textShadow: '2px 2px 4px #579cbc',
+    fontSize: '2xl',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    p: 2,
+    borderRadius: 'md',
+    filter: 'drop-shadow(0 0 0.75rem #feff27)',
+    m: 2,
+
+};
+
 
     export default function Header() {
         const { user, userData, setAppState } = useContext(AppContext);
@@ -26,31 +101,33 @@ const spacerStyle = {
 
         return (
             <Flex as="nav" align="center" justify="space-between">
-                {userData && userData.isAdmin && (
-                    <NavLink to="/admin-panel" as={Button} variant="link">Admin</NavLink>
-                )}
+            {userData && userData.isAdmin && (
+            <Button sx={buttonStyle5} as={NavLink} to="/admin-panel" variant="link">Admin</Button>
+            )}
 
-                <Button onClick={() => setShowContent(!showContent)}>User</Button> 
-                {showContent && ( 
-                    <>
-                        {user ? (
-                            <>         
-                                <NavLink to="/posts-create" as={Button} variant="link">Create post</NavLink>
-                                <NavLink to="/posts" as={Button} variant="link">All posts</NavLink>
-                                <NavLink to="/edit-profile" as={Button} variant="link">Edit Profile</NavLink>
-                                <Button onClick={logout} variant="link">LogOut</Button>
-                            </>
-                        ) : (
-                            <>
-                                <NavLink to="/login" as={Button} variant="link">Login</NavLink>
-                                <Spacer sx={spacerStyle} />
-                                <NavLink to="/register" as={Button} variant="link">Register</NavLink>
-                            </>
-                        )}
-                    </>
-                )}
-                <Spacer />
-                <NavLink to="/" as={Button} variant="link">Home</NavLink>
+            <Button sx={buttonStyle4} onClick={() => setShowContent(!showContent)}>User</Button> 
+            {showContent && ( 
+            <>
+            {user ? (
+            <>         
+            <Box>
+            <Button sx={buttonStyle2} as={NavLink} to="/posts-create" variant="link">Create post</Button>
+            <Button sx={buttonStyle2} as={NavLink} to="/posts" variant="link">All posts</Button>
+            <Button sx={buttonStyle2} as={NavLink} to="/edit-profile" variant="link">Edit Profile</Button>
+            <Button sx={buttonStyle2} onClick={logout} variant="link">LogOut</Button>
+            </Box>
+            </>
+            ) : (
+            <>
+            <Button sx={buttonStyle2} as={NavLink} to="/login" variant="link">Login</Button>
+            <Spacer sx={spacerStyle} />
+            <Button sx={buttonStyle2} as={NavLink} to="/register" variant="link">Register</Button>
+            </>
+            )}
+            </>
+            )}
+            <Spacer />
+            <Button sx={buttonStyle} as={NavLink} to="/" variant="link">Home</Button>
             </Flex>
         );
     }

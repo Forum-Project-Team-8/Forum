@@ -137,19 +137,23 @@ function UsersList() {
 
     const renderUser = (user, index) => (
         <Box key={index} border="1px" borderRadius="md" p={4} my={2}>
-            <strong>User ID:</strong> {user.uid}<br />
             <strong>Username:</strong> {user.handle}<br />
             <strong>First Name:</strong> {user.firstname}<br />
             <strong>Last Name:</strong> {user.lastname}<br />
             <strong>Email:</strong> {user.email}<br />
-            <strong>isAdmin:</strong> {user.isAdmin ? 'Yes' : 'No'}<br />
+            <strong>User type:</strong> {user.isAdmin ? 'Admin' : 'Regular user'}<br />
+            <strong>User ID:</strong> {user.uid}<br />
             <Button onClick={() => deleteUser(user.handle)}>Delete</Button>
             <Button onClick={() => toggleAdminStatus(user.handle, user.isAdmin)}>Toggle Admin</Button>
             <Button onClick={() => toggleUserBlock(user.handle, user.isBlocked)}>
                 {user.isBlocked ? 'Unblock' : 'Block'}
             </Button>
             <Button onClick={() => fetchUserPosts(user.handle)}>Show Posts</Button>
-            <img src={`data:image/jpg;base64,${user.photoData}`} style={{ width: '10%', maxWidth: '50%', display: 'block', margin: '0 auto', paddingTop: '15px'}} alt="No User Photo" />
+            {user.photoData ? (
+    <img src={`data:image/jpg;base64,${user.photoData}`} style={{ width: '10%', maxWidth: '50%', display: 'block', margin: '0 auto', paddingTop: '15px'}} alt="User Photo" />
+) : (
+    <p>No profile photo available</p>
+)}
         </Box>
     );
 
