@@ -127,15 +127,15 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
             {authorData && authorData.photoData && (
-    <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
-)}
+                <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
+            )}
             <Heading sx={contentPost}>{post.content}</Heading>
-                        {isSingleView && post.photoUrl && (
-    <div>
-        <img src={post.photoUrl} alt="Post" style={{ maxWidth: '100%' }} />
-    </div>
-)}
-            <Link to={`/posts/${post.id}`}>View</Link>
+            {isSingleView && post.photoUrl && (
+                <div>
+                    <img src={post.photoUrl} alt="Post" style={{ maxWidth: '100%' }} />
+                </div>
+            )}
+            <Button bg={'orange'} as={Link} to={`/posts/${post.id}`} colorScheme="blue">View</Button>
             <p></p>
             {post?.likedBy.includes(userData?.handle)
                 ? <Button onClick={dislike} colorScheme="yellow">Dislike</Button>
@@ -156,7 +156,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             )}
 
             <Button onClick={like} colorScheme="green">{`Likes: ${post.likedBy.length}`}</Button>
-            <Button colorScheme="blue">{`Replies: ${post.replies?Object.entries(post.replies).length : 0}`}</Button>
+            <Button colorScheme="blue">{`Replies: ${post.replies ? Object.entries(post.replies).length : 0}`}</Button>
 
             {isSingleView && post.replies && Object.entries(post.replies).map(([replyId, reply]) => {
                 return (
@@ -165,7 +165,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                             <textarea
                                 value={editedReply}
                                 onChange={(e) => setEditedReply(e.target.value)}
-                                style={{ height: '200px' }} 
+                                style={{ height: '200px' }}
                             />
                         ) : (
                             reply.content
@@ -189,18 +189,18 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
                 <span key={index}>#{tag}{index !== post.tags.length - 1 && ' '}</span>
             ))}
 
-{isSingleView && (
-    <form onSubmit={submitReply}>
-        <textarea
-            value={replyContent}
-            onChange={(e) => setReplyContent(e.target.value)}
-            placeholder="Write a reply..."
-            style={{ height: '200px' }} // Set the height to make it bigger
-        />
-        <br />
-        <Button type="submit" colorScheme="blue">Reply</Button>
-    </form>
-)}
+            {isSingleView && (
+                <form onSubmit={submitReply}>
+                    <textarea
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        placeholder="Write a reply..."
+                        style={{ height: '200px' }} // Set the height to make it bigger
+                    />
+                    <br />
+                    <Button type="submit" colorScheme="blue">Reply</Button>
+                </form>
+            )}
         </div>
     )
 }

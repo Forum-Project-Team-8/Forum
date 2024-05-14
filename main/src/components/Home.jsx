@@ -30,7 +30,6 @@ const boxStyle2 = {
 
 const headerStyle = {
     color: '#005f73',
-    textShadow: '2px 2px 4px #000000',
     fontSize: '3xl',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -49,21 +48,22 @@ const headerStyle2 = {
     textAlign: 'center',
     p: 2,
     borderRadius: 'md',
-    filter: 'drop-shadow(0 0 0.75rem #444)',
+    filter: 'drop-shadow(0 0 0.75rem #f4cccc)',
     m: 2,
 };
 
 
 
 const animateText = keyframes`
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+0% {
+    opacity: 1;
+    transform: translateY(0);
+}
+100% {
+    opacity: 0;
+    transform: translateY(20px);
+
+}
 `;
 
 const headerStyle3 = {
@@ -73,7 +73,6 @@ const headerStyle3 = {
     textAlign: 'center',
     p: 2,
     borderRadius: 'md',
-    filter: 'drop-shadow(0 0 0.75rem #222)',
     m: 3,
     animation: `${animateText} 1s ease-in-out`,
 };
