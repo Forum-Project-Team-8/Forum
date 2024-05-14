@@ -127,7 +127,8 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
             )}
             <p>by {post.author}, {new Date(post.createdOn).toLocaleDateString('bg-BG')}</p>
             {authorData && authorData.photoData && (
-    <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
+            <img src={`data:image/jpg;base64,${authorData.photoData}`} style={{ width: '10%', maxWidth: '50%', display: 'block', margin: '0 auto', paddingTop: '15px' }} alt="No User Photo" />
+    
 )}
             <Heading sx={contentPost}>{post.content}</Heading>
                         {isSingleView && post.photoUrl && (

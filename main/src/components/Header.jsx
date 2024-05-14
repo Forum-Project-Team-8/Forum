@@ -7,7 +7,7 @@
     import { Button, Flex, Spacer } from "@chakra-ui/react";
     import AdminPanel from "./AdminPanel";
     import { Box } from "@chakra-ui/react";
-import { m } from "framer-motion";
+    import { m } from "framer-motion";
 
 
 const spacerStyle = {

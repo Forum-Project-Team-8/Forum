@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from "../config/firebase-config";
 import { get, ref, update, remove, child } from 'firebase/database';
 import { getPostById } from '../services/posts.service';
-import { Box, Button, Input, VStack } from '@chakra-ui/react';
+import { Box, Button, Input, VStack, Heading } from '@chakra-ui/react';
 
 function UsersList() {
     const [users, setUsers] = useState([]);
@@ -149,7 +149,7 @@ function UsersList() {
                 {user.isBlocked ? 'Unblock' : 'Block'}
             </Button>
             <Button onClick={() => fetchUserPosts(user.handle)}>Show Posts</Button>
-            <img src={`data:image/jpg;base64,${user.photoData}`} style={{ width: '10%' }} alt="No User Photo" />
+            <img src={`data:image/jpg;base64,${user.photoData}`} style={{ width: '10%', maxWidth: '50%', display: 'block', margin: '0 auto', paddingTop: '15px'}} alt="No User Photo" />
         </Box>
     );
 
@@ -164,7 +164,7 @@ function UsersList() {
                 ))
             ) : (
                 <>
-                    <h2>Users List</h2>
+                    <Heading size="lg">Users List</Heading>
                     <Input
                         value={search}
                         onChange={e => setSearch(e.target.value)}
