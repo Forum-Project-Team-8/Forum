@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 import { likePost, dislikePost, getPostById, addReply } from '../services/posts.service';
-import { ref, remove } from 'firebase/database';
-import { db } from '../config/firebase-config';
 import { editReply } from '../services/posts.service';
 import { Button, Heading } from '@chakra-ui/react';
 import { getUserByHandle } from '../services/user.service';
+import { deleteReplyInDB } from '../services/posts.service';
 
 const contentPost = {
     color: '#005f73',
@@ -37,7 +36,6 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
     useEffect(() => {
         fetchPost();
         fetchAuthorData();
-        console.log('Post:', post);
     }, []);
 
     const fetchPost = async () => {
@@ -47,9 +45,7 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
 
     const fetchAuthorData = async () => {
         const data = await getUserByHandle(post.author);
-        console.log(data.val())
         setAuthorData(data.val());
-        console.log('Author data:', authorData);
     };
 
     const like = async () => {
@@ -80,13 +76,12 @@ export default function Post({ post: initialPost, deletePost, editPost, isSingle
 
     const deleteReply = async (replyId) => {
         try {
-            await remove(ref(db, `posts/${post.id}/replies/${replyId}`));
-            fetchPost(); 
-            console.dir(post.replies)
+          await deleteReplyInDB(post.id, replyId);
+          fetchPost(); 
         } catch (error) {
-            console.error('Error deleting reply:', error);
+          console.error('Error deleting reply:', error);
         }
-    };
+      };
 
     const handleDelete = () => {
         deletePost(post.id);

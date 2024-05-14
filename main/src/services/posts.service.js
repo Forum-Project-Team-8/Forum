@@ -1,4 +1,4 @@
-import { ref, push, get, set, update, child, } from 'firebase/database';
+import { ref, push, get, set, update, child, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 export const addPost = async(author, title, content, tags, photoUrl) => {
@@ -110,7 +110,7 @@ export const getUsers = async () => {
 export const updatePost = async (postId, updatedPostData) => {
     const postRef = ref(db, `posts/${postId}`);
     try {
-        await set(postRef, updatedPostData); // Update the post data in the database
+        await set(postRef, updatedPostData); 
         console.log("Post updated successfully");
     } catch (error) {
         console.error("Error updating post:", error);
@@ -141,6 +141,15 @@ export const addTagsToPost = async (postId, tags) => {
         }
     });
 };
+
+export const deleteReplyInDB = async (postId, replyId) => {
+    try {
+      await remove(ref(db, `posts/${postId}/replies/${replyId}`));
+    } catch (error) {
+      console.error('Error deleting reply in DB:', error);
+      throw error; 
+    }
+  }
 
 /* export const getPostByUser = async (handle) => {
     const snapshot = await get(ref(db, 'posts'));
