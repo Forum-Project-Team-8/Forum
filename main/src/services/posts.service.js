@@ -190,6 +190,26 @@ export const deleteReplyInDB = async (postId, replyId) => {
     }
   }
 
+  export async function removeTagsFromPost(postId) {
+    const tagsRef = ref(db, 'tags');
+    const tagsSnapshot = await get(tagsRef);
+    if (tagsSnapshot.exists()) {
+        const tags = tagsSnapshot.val();
+        await Promise.all(Object.keys(tags).map(async (tag) => {
+            const tagPostRef = ref(db, `tags/${tag}/${postId}`);
+            const tagPostSnapshot = await get(tagPostRef);
+            if (tagPostSnapshot.exists()) {
+                await remove(tagPostRef);
+            }
+            const tagRef = child(tagsRef, tag);
+            const tagSnapshot = await get(tagRef);
+            if (tagSnapshot.exists() && Object.keys(tagSnapshot.val()).length === 0) {
+                await remove(tagRef);
+            }
+        }));
+    }
+}
+
 /* export const getPostByUser = async (handle) => {
     const snapshot = await get(ref(db, 'posts'));
     if (!snapshot.exists()) return [];
